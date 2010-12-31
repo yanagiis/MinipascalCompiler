@@ -1,6 +1,9 @@
 #ifndef MINIPASCAL_NVARIABLEDECLARATION_H
 #define MINIPASCAL_NVARIABLEDECLARATION_H
 
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
 #include "minipascal_ndeclaration.h"
 #include "minipascal_type.h"
 
@@ -12,6 +15,7 @@ namespace minipascal {
                 // Implement Node pure virtual method
                 std::string getOutput();
         };
+        typedef boost::shared_ptr<NVariableDeclaration> ShareNVariableDeclaration;
 }
 
 #endif // MINIPASCAL_NVARIABLEDECLARATION_H

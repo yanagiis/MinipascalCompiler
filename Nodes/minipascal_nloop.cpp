@@ -1,6 +1,6 @@
 #include "minipascal_nloop.h"
 
-minipascal::NLoop::NLoop(const minipascal::NExpression* cond, const minipascal::NStatement* stmt)
+minipascal::NLoop::NLoop(minipascal::NExpression* cond, minipascal::NStatement* stmt)
 {
         setCond(cond);
         setStmt(stmt);
@@ -21,12 +21,12 @@ const minipascal::ShareNStatement minipascal::NLoop::getStmt()
         return stmt;
 }
 
-void minipascal::NLoop::setCond(const minipascal::NExpression* cond)
+void minipascal::NLoop::setCond(minipascal::NExpression* cond)
 {
         this->cond.reset(cond);
 }
 
-void minipascal::NLoop::setStmt(const minipascal::NStatement* stmt)
+void minipascal::NLoop::setStmt(minipascal::NStatement* stmt)
 {
         this->stmt.reset(stmt);
 }

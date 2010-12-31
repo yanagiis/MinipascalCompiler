@@ -10,12 +10,12 @@ minipascal::NExpression::~NExpression()
 
 }
 
-const minipascal::Type minipascal::NExpression::getType()
+const minipascal::Type* minipascal::NExpression::getType()
 {
         return type;
 }
 
-void minipascal::NExpression::setType(const Type* type)
+void minipascal::NExpression::setType(Type* type)
 {
         this->type = type;
 }

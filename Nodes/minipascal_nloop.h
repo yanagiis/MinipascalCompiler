@@ -9,11 +9,11 @@
 namespace minipascal {
         class NLoop : public NStatement{
         public:
-                NLoop(const NExpression* cond = NULL, const NStatement* stmt = NULL);
+                NLoop(minipascal::NExpression* cond, minipascal::NStatement* stmt);
                 virtual ~NLoop();
                 // set methods
-                void setCond(const NExpression* cond);
-                void setStmt(const minipascal::NStatement* stmt);
+                void setCond(minipascal::NExpression* cond);
+                void setStmt(minipascal::NStatement* stmt);
                 // get methods
                 const ShareNExpression getCond();
                 const ShareNStatement getStmt();

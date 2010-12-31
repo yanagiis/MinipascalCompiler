@@ -1,3 +1,28 @@
+%code requires {
+#include "minipascal_node.h"
+#include "minipascal_nassignment.h"
+#include "minipascal_nbinaryoperator.h"
+#include "minipascal_nblock.h"
+#include "minipascal_nboolean.h"
+#include "minipascal_ncontrol.h"
+#include "minipascal_ndeclaration.h"
+#include "minipascal_ndouble.h"
+#include "minipascal_nexpression.h"
+#include "minipascal_nint.h"
+#include "minipascal_nloop.h"
+#include "minipascal_nmethodcall.h"
+#include "minipascal_nmethoddeclaration.h"
+#include "minipascal_nprogram.h"
+#include "minipascal_nstatement.h"
+#include "minipascal_nstatementexpression.h"
+#include "minipascal_nstring.h"
+#include "minipascal_nvalue.h"
+#include "minipascal_nvariable.h"
+#include "minipascal_nvariabledeclaration.h"
+#include "minipascal_type.h"
+#include "minipascal_lists.h"
+}
+
 %{
 #include <stdio.h>
 #include <string>
@@ -24,6 +49,7 @@
 #include "minipascal_nvariable.h"
 #include "minipascal_nvariabledeclaration.h"
 #include "minipascal_type.h"
+#include "minipascal_lists.h"
 %}
 
 %require "2.3"
@@ -124,13 +150,13 @@
 start 
         : PROGRAM ID 
         {
-                driver.program = new NPorgram();
+                driver.program = new NProgram();
                 driver.program->setName($2);
-                driver.program->setLineNo(yylloc->begin.line);
+                driver.program->setLineNo(yylloc.begin.line);
         }
         LPAREN identifier_list RPAREN SEMICOLON declarations subprogram_declarations compound_statement PERIOD
         {
-                dirver.program->setIds($5);
+                driver.program->setIds($5);
                 driver.program->setDecls($8);
                 driver.program->setMhds($9);
                 driver.program->setBlock($10);
@@ -164,11 +190,12 @@ declarations
         : declarations VAR identifier_list COLON type SEMICOLON
         {
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = $3->begin(); it != $3->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, $5);
-                        declaration->setLineNo(yylloc->begin.line);
-                        $1->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, $5));
+                        sharedeclaration->setLineNo(yylloc.begin.line);
+                        $1->push_back(sharedeclaration);
                 }
                 $$ = $1;
         }
@@ -226,20 +253,19 @@ type
 standard_type	
         : INTEGER_T
         {
-                $$ = new Type();
-                $$->setBuildInType(INT_T);
+                $$ = new IntType();
         }
         | REAL_T
         {
-                $$ = new Type();
-                $$->setBuildInType(DOUBLE_T);
+                $$ = new RealType();
         }
         ;
 
 subprogram_declarations	
         : subprogram_declarations subprogram_declaration SEMICOLON
         {
-                $1->push_back($2);
+                ShareNMethodDeclaration share = ShareNMethodDeclaration($2);
+                $1->push_back(share);
                 $$ = $1;
         }
         |
@@ -248,8 +274,6 @@ subprogram_declarations
         }
         | subprogram_declarations subprogram_declaration error 
         {
-                $1->push_back($2);
-                $$ = $1;
                 error(yylloc, " Error: miss ';'");
         }
         ;
@@ -266,13 +290,20 @@ subprogram_declaration
 subprogram_head	
         : FUNCTION ID arguments COLON standard_type SEMICOLON
         {
-                $$ = new NMethodDeclaration($2, $3, $5);
+                $$ = new NMethodDeclaration();
+                $$->setName($2);
+                $$->setArgs($3);
+                $$->setType($5);
+                $$->setLineNo(yylloc.begin.line);
         }
         | PROCEDURE ID arguments SEMICOLON
         {
-                Type* temp = new Type();
-                temp->setBuildInType(VOID_T);
-                $$ = new NMethodDeclaration($2, $3, temp);
+                VoidType* temp = new VoidType();
+                $$ = new NMethodDeclaration();
+                $$->setName($2);
+                $$->setArgs($3);
+                $$->setType(temp);
+                $$->setLineNo(yylloc.begin.line);
         }
         ;
 
@@ -296,19 +327,21 @@ parameter_list
         {
                 $$ = new Decls_list();
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = $1->begin(); it != $1->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, $3);
-                        $$->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, $3));
+                        $$->push_back(sharedeclaration);
                 }
         }
         | parameter_list SEMICOLON identifier_list COLON type
         {
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = $3->begin(); it != $3->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, $5);
-                        $1->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, $5));
+                        $1->push_back(sharedeclaration);
                 }
                 $$ = $1;
         }
@@ -361,11 +394,11 @@ statement_list
         : statement
         {
                 $$ = new Stmt_list();
-                $$->push_back($1);
+                $$->push_back(ShareNStatement($1));
         }
         | statement_list SEMICOLON statement
         {
-                $1->push_back($3);
+                $1->push_back(ShareNStatement($3));
                 $$ = $1;
         }
         ;
@@ -409,7 +442,8 @@ statement
 variable	
         : ID tail
         {
-                $$ = new NVariable($1);
+                $$ = new NVariable();
+                $$->setName($1);
                 $$->setExps($2);
         }
         ;
@@ -417,7 +451,8 @@ variable
 tail	
         : L_SQUARE_BRACKET expression R_SQUARE_BRACKET tail
         {
-                $4->push_front($2);
+                ShareNExpression shareexpression = ShareNExpression($2);
+                $4->push_front(shareexpression);
                 $$ = $4;
         }
         |
@@ -449,11 +484,11 @@ expression_list
         : expression
         {
                 $$ = new Exps_list();
-                $$->push_back($1);
+                $$->push_back(ShareNExpression($1));
         }
         | expression_list COMMA expression
         {
-                $1->push_back($3);
+                $1->push_back(ShareNExpression($3));
                 $$ = $1;
         }
         | expression_list error expression
@@ -469,7 +504,7 @@ expression
         }
         | simple_expression relop simple_expression
         {
-                $$ = new NBinaryOperator($1, $2, $3);
+                $$ = new NBinaryOperator($2, $1, $3);
         }
         ;
 
@@ -480,7 +515,7 @@ simple_expression
         }
         | simple_expression addop term
         {
-                $$ = new NBinaryOperator($1, $2, $3);
+                $$ = new NBinaryOperator($2, $1, $3);
         }
         ;
 
@@ -491,14 +526,15 @@ term
         }
 	| term mulop factor
 	{
-                $$ = new NBinaryOperator($1, $2, $3);
+                $$ = new NBinaryOperator($2, $1, $3);
         }
 	;
 
 factor	
 	: ID tail
 	{
-                NVariable* var = new NVariable($1);
+                NVariable* var = new NVariable();
+                var->setName($1);
                 var->setExps($2);
                 $$ = var;
         }
@@ -512,7 +548,7 @@ factor
         }
 	| STRING
 	{
-                $$ = new NString(*$1);
+                $$ = new NString($1);
         }
 	| LPAREN expression RPAREN
 	{

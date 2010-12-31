@@ -21,6 +21,11 @@ std::string minipascal::NDeclaration::getName() const
         return name;
 }
 
+const minipascal::Type* minipascal::NDeclaration::getType() const
+{
+        return type;
+}
+
 void minipascal::NDeclaration::setName(const char* name)
 {
         if(name != NULL)
@@ -36,5 +41,5 @@ void minipascal::NDeclaration::setName(const std::string* name)
 void minipascal::NDeclaration::setType(const minipascal::Type* type)
 {
         if(type != NULL)
-                this->type = *type;
+                this->type = type;
 }

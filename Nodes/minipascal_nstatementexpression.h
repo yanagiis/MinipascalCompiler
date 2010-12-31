@@ -4,9 +4,10 @@
 #include <boost/shared_ptr.hpp>
 
 #include "minipascal_nexpression.h"
+#include "minipascal_nstatement.h"
 
 namespace minipascal {
-        class NStatementExpression {
+        class NStatementExpression : public NStatement{
         public:
                 NStatementExpression(NExpression* exp = NULL);
                 virtual ~NStatementExpression();
@@ -19,6 +20,7 @@ namespace minipascal {
         private:
                 ShareNExpression exp;
         };
+        typedef boost::shared_ptr<NStatementExpression> ShareNStatementExpression;
 }
 
 #endif // MINIPASCAL_NSTATEMENTEXPRESSION_H

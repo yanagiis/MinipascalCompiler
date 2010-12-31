@@ -15,22 +15,22 @@ minipascal::NProgram::~NProgram()
         delete mhd_list;
 }
 
-minipascal::ShareBlock minipascal::NProgram::getBlock()
+minipascal::ShareNBlock minipascal::NProgram::getBlock()
 {
         return block;
 }
 
-Decls_list* minipascal::NProgram::getDecls()
+minipascal::Decls_list* minipascal::NProgram::getDecls()
 {
         return decl_list;
 }
 
-Id_list* minipascal::NProgram::getIds()
+minipascal::Id_list* minipascal::NProgram::getIds()
 {
         return ids;
 }
 
-Mhd_list* minipascal::NProgram::getMhds()
+minipascal::Mhd_list* minipascal::NProgram::getMhds()
 {
         return mhd_list;
 }

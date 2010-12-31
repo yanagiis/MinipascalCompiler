@@ -1,16 +1,5 @@
 #include "minipascal_node.h"
 
-minipascal::Node::Node()
-{
-        lineno = 0;
-        fail = false;
-}
-
-minipascal::Node::~Node()
-{
-
-}
-
 void minipascal::Node::accept(minipascal::Visitor* visitor)
 {
         visitor->visit(this);

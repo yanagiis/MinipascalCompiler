@@ -4,6 +4,8 @@
 #include "minipascal_lists.h"
 #include "minipascal_nexpression.h"
 
+#include <string>
+
 namespace minipascal{
         class NVariable : public NExpression {
         public:

@@ -15,7 +15,7 @@ minipascal::Decls_list* minipascal::NMethodDeclaration::getArgs()
         return args;
 }
 
-minipascal::ShareBlock minipascal::NMethodDeclaration::getBlock()
+minipascal::ShareNBlock minipascal::NMethodDeclaration::getBlock()
 {
         return block;
 }

@@ -11,20 +11,21 @@ namespace minipascal {
                 virtual ~Type();
                 std::string getName();
                 void setName(std::string name);
-                virtual bool operator==(const minipascal::Type& copytype) = 0;
+                virtual bool operator==(minipascal::Type* copytype) = 0;
         private:
                 std::string name;
         };
         
-        typedef std::pair<int, int> Range;
         
         class ArrayType : public Type {
         public:
-                ArrayType();
+                typedef std::pair<int, int> Range;
+        public:
+                ArrayType(Type* type = NULL);
                 ArrayType(ArrayType& copytype);
                 virtual ~ArrayType();
                 virtual ArrayType operator=(ArrayType& copytype);
-                virtual bool operator==(const minipascal::Type& copytype);
+                virtual bool operator==(minipascal::Type* copytype);
                 // set methods
                 void setType(Type* type);
                 void setRange(int lowerbound, int upperbound);
@@ -41,28 +42,35 @@ namespace minipascal {
         public:
                 IntType();
                 virtual ~IntType();
-                virtual bool operator==(const minipascal::Type& copytype);
+                virtual bool operator==(minipascal::Type* copytype);
         };
         
         class RealType : public Type {
         public:
                 RealType();
                 virtual ~RealType();
-                virtual bool operator==(const minipascal::Type& copytype);
+                virtual bool operator==(minipascal::Type* copytype);
         };
         
         class StringType : public Type {
         public:
                 StringType();
                 virtual ~StringType();
-                virtual bool operator==(const minipascal::Type& copytype);
+                virtual bool operator==(minipascal::Type* copytype);
         };
         
         class BooleanType : public Type {
         public:
                 BooleanType();
                 virtual ~BooleanType();
-                virtual bool operator==(const minipascal::Type& copytype);
+                virtual bool operator==(minipascal::Type* copytype);
+        };
+        
+        class VoidType : public Type {
+        public:
+                VoidType();
+                virtual ~VoidType();
+                virtual bool operator==(minipascal::Type* copytype);
         };
 }
 #endif // MINIPASCAL_TYPE_H

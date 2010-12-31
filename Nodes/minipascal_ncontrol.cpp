@@ -1,6 +1,6 @@
 #include "minipascal_ncontrol.h"
 
-minipascal::NControl(NExpression* cond, NStatement* iftrue, NStatement* iffalse)
+minipascal::NControl::NControl(NExpression* cond, NStatement* iftrue, NStatement* iffalse)
 {
         setCond(cond);
         setTrue(iftrue);

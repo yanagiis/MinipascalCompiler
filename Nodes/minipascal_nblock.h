@@ -1,6 +1,7 @@
 #ifndef MINIPASCAL_NBLOCK_H
 #define MINIPASCAL_NBLOCK_H
 
+#include "minipascal_lists.h"
 #include "minipascal_nstatement.h"
 
 namespace minipascal{

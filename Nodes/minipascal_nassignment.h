@@ -8,7 +8,7 @@
 namespace minipascal {
         class NAssignment : public NStatement{
         public:
-                NAssignment();
+                NAssignment(NVariable* var = NULL, NExpression* exp = NULL);
                 virtual ~NAssignment();
                 // set methods
                 void setExp(NExpression* exp);

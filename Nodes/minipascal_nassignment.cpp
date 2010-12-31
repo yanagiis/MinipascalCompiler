@@ -1,8 +1,9 @@
 #include "minipascal_nassignment.h"
 
-minipascal::NAssignment::NAssignment()
+minipascal::NAssignment::NAssignment(minipascal::NVariable* var, minipascal::NExpression* exp)
 {
-
+        setVar(var);
+        setExp(exp);
 }
 
 minipascal::NAssignment::~NAssignment()

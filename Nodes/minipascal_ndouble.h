@@ -3,8 +3,8 @@
 
 #include "minipascal_nvalue.h"
 
-namespace minipacsal {
-        class NDouble : public minipascal::NValue {
+namespace minipascal {
+        class NDouble : public NValue {
         public:
                 NDouble(double value = 0);
                 virtual ~NDouble();

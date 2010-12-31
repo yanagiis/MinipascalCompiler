@@ -4,6 +4,9 @@
 #include "minipascal_lists.h"
 #include "minipascal_nblock.h"
 #include "minipascal_ndeclaration.h"
+#include "minipascal_nexpression.h"
+#include "minipascal_nstatement.h"
+#include "minipascal_nmethoddeclaration.h"
 
 namespace minipascal {
         class NProgram : public NDeclaration {

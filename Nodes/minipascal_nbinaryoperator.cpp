@@ -1,12 +1,12 @@
 #include "minipascal_nbinaryoperator.h"
 
-minipascal::NBinaryOperator::NBinaryOperator(minipascal::NExpression* left, minipascal::NExpression* right): NExpression(left, right)
+minipascal::NBinaryOperator::NBinaryOperator(minipascal::NExpression* left, minipascal::NExpression* right)
 {
         setLeft(left);
         setRight(right);
 }
 
-minipascal::NBinaryOperator::NBinaryOperator(minipascal::NBinaryOperator::BOP op, minipascal::NExpression* left, minipascal::NExpression* right): NExpression(op, left, right)
+minipascal::NBinaryOperator::NBinaryOperator(minipascal::NBinaryOperator::BOP op, minipascal::NExpression* left, minipascal::NExpression* right)
 {
         setOP(op);
         setLeft(left);

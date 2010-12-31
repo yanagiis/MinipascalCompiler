@@ -36,6 +36,38 @@
 #ifndef PARSER_HEADER_H
 # define PARSER_HEADER_H
 
+/* "%code requires" blocks.  */
+
+/* Line 35 of lalr1.cc  */
+#line 1 "minipascal_parser.yy"
+
+#include "minipascal_node.h"
+#include "minipascal_nassignment.h"
+#include "minipascal_nbinaryoperator.h"
+#include "minipascal_nblock.h"
+#include "minipascal_nboolean.h"
+#include "minipascal_ncontrol.h"
+#include "minipascal_ndeclaration.h"
+#include "minipascal_ndouble.h"
+#include "minipascal_nexpression.h"
+#include "minipascal_nint.h"
+#include "minipascal_nloop.h"
+#include "minipascal_nmethodcall.h"
+#include "minipascal_nmethoddeclaration.h"
+#include "minipascal_nprogram.h"
+#include "minipascal_nstatement.h"
+#include "minipascal_nstatementexpression.h"
+#include "minipascal_nstring.h"
+#include "minipascal_nvalue.h"
+#include "minipascal_nvariable.h"
+#include "minipascal_nvariabledeclaration.h"
+#include "minipascal_type.h"
+#include "minipascal_lists.h"
+
+
+
+/* Line 35 of lalr1.cc  */
+#line 71 "minipascal_parser.hpp"
 
 
 #include <string>
@@ -46,14 +78,14 @@
 namespace minipascal {
 
 /* Line 35 of lalr1.cc  */
-#line 50 "minipascal_parser.hpp"
+#line 82 "minipascal_parser.hpp"
   class position;
   class location;
 
 } // minipascal
 
 /* Line 35 of lalr1.cc  */
-#line 57 "minipascal_parser.hpp"
+#line 89 "minipascal_parser.hpp"
 
 #include "location.hh"
 
@@ -98,7 +130,7 @@ do {							\
 namespace minipascal {
 
 /* Line 35 of lalr1.cc  */
-#line 102 "minipascal_parser.hpp"
+#line 134 "minipascal_parser.hpp"
 
   /// A Bison parser.
   class Parser
@@ -110,7 +142,7 @@ namespace minipascal {
     {
 
 /* Line 35 of lalr1.cc  */
-#line 45 "minipascal_parser.yy"
+#line 71 "minipascal_parser.yy"
 
 	int integerVal;
 	double doubleVal;
@@ -146,7 +178,7 @@ namespace minipascal {
 
 
 /* Line 35 of lalr1.cc  */
-#line 150 "minipascal_parser.hpp"
+#line 182 "minipascal_parser.hpp"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -374,7 +406,7 @@ namespace minipascal {
 } // minipascal
 
 /* Line 35 of lalr1.cc  */
-#line 378 "minipascal_parser.hpp"
+#line 410 "minipascal_parser.hpp"
 
 
 

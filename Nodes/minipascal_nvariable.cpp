@@ -2,7 +2,7 @@
 
 minipascal::NVariable::NVariable(std::string name)
 {
-        this->name = name;
+        setName(&name);
 }
 
 minipascal::Exps_list* minipascal::NVariable::getExps()
@@ -20,7 +20,7 @@ std::string minipascal::NVariable::getName()
         return name;
 }
 
-void minipascal::NVariable::setName(const std::string* name)
+void minipascal::NVariable::setName(std::string* name)
 {
         this->name = *name;
 }

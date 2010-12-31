@@ -1,18 +1,18 @@
 #include "minipascal_ndouble.h"
 
-#include <string.h>
+#include <stdio.h>
 
-minipacsal::NDouble::NDouble(double value)
+minipascal::NDouble::NDouble(double value)
 {
 
 }
 
-minipacsal::NDouble::~NDouble()
+minipascal::NDouble::~NDouble()
 {
 
 }
 
-std::string minipacsal::NDouble::getOutput()
+std::string minipascal::NDouble::getOutput()
 {
         char* intstring = new char[16];
         int count = sprintf(intstring, "%f", getValue());
@@ -20,12 +20,12 @@ std::string minipacsal::NDouble::getOutput()
         return output;
 }
 
-double minipacsal::NDouble::getValue()
+double minipascal::NDouble::getValue()
 {
         return value;
 }
 
-void minipacsal::NDouble::setValue(double value)
+void minipascal::NDouble::setValue(double value)
 {
         this->value = value;
 }

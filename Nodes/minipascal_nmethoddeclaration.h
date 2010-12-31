@@ -1,7 +1,9 @@
 #ifndef MINIPASCAL_NMETHODDECLARATION_H
 #define MINIPASCAL_NMETHODDECLARATION_H
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
+
 #include "minipascal_ndeclaration.h"
 #include "minipascal_nblock.h"
 
@@ -26,6 +28,7 @@ namespace minipascal {
                 ShareNBlock block;
         };
         typedef boost::shared_ptr<NMethodDeclaration> ShareNMethodDeclaration;
+        typedef std::vector<ShareNMethodDeclaration> Mhd_list;
 }
 
 #endif // MINIPASCAL_NMETHODDECLARATION_H

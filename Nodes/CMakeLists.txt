@@ -10,6 +10,9 @@ find_package( Boost 1.36.0 COMPONENTS system )
 if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
         add_library(minipascalnodes 
+                        minipascal_ndeclaration.cpp 
+                        minipascal_nexpression.cpp 
+                        minipascal_nstatement.cpp 
                         minipascal_nmethoddeclaration.cpp 
                         minipascal_nvariabledeclaration.cpp 
                         minipascal_nprogram.cpp 
@@ -28,9 +31,6 @@ if(Boost_FOUND)
                         minipascal_type.cpp 
                         minipascal_visitor.cpp 
                         minipascal_nblock.cpp 
-                        minipascal_ndeclaration.cpp 
-                        minipascal_nexpression.cpp 
-                        minipascal_nstatement.cpp 
                         minipascal_node.cpp)
         target_link_libraries(minipascalnodes ${Boost_LIBRARIES})
 endif()

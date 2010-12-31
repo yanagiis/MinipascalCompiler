@@ -37,7 +37,7 @@
 /* First part of user declarations.  */
 
 /* Line 311 of lalr1.cc  */
-#line 1 "minipascal_parser.yy"
+#line 26 "minipascal_parser.yy"
 
 #include <stdio.h>
 #include <string>
@@ -64,10 +64,11 @@
 #include "minipascal_nvariable.h"
 #include "minipascal_nvariabledeclaration.h"
 #include "minipascal_type.h"
+#include "minipascal_lists.h"
 
 
 /* Line 311 of lalr1.cc  */
-#line 71 "minipascal_parser.cpp"
+#line 72 "minipascal_parser.cpp"
 
 
 #include "minipascal_parser.hpp"
@@ -75,7 +76,7 @@
 /* User implementation prologue.  */
 
 /* Line 317 of lalr1.cc  */
-#line 78 "minipascal_parser.yy"
+#line 104 "minipascal_parser.yy"
 
 #include "minipascal_driver.h"
 #include "minipascal_scanner.h"
@@ -85,7 +86,7 @@
 
 
 /* Line 317 of lalr1.cc  */
-#line 89 "minipascal_parser.cpp"
+#line 90 "minipascal_parser.cpp"
 
 #ifndef YY_
 # if defined YYENABLE_NLS && YYENABLE_NLS
@@ -151,7 +152,7 @@ do {					\
 namespace minipascal {
 
 /* Line 380 of lalr1.cc  */
-#line 155 "minipascal_parser.cpp"
+#line 156 "minipascal_parser.cpp"
 #if YYERROR_VERBOSE
 
   /* Return YYSTR after stripping away unnecessary quotes and
@@ -328,13 +329,13 @@ namespace minipascal {
     /* User initialization code.  */
     
 /* Line 553 of lalr1.cc  */
-#line 37 "minipascal_parser.yy"
+#line 63 "minipascal_parser.yy"
 {
 	yylloc.begin.filename = yylloc.end.filename = &driver.streamname;
 }
 
 /* Line 553 of lalr1.cc  */
-#line 338 "minipascal_parser.cpp"
+#line 339 "minipascal_parser.cpp"
 
     /* Initialize the stacks.  The initial state will be pushed in
        yynewstate, since the latter expects the semantical and the
@@ -453,20 +454,20 @@ namespace minipascal {
 	  case 2:
 
 /* Line 678 of lalr1.cc  */
-#line 126 "minipascal_parser.yy"
+#line 152 "minipascal_parser.yy"
     {
-                driver.program = new NPorgram();
+                driver.program = new NProgram();
                 driver.program->setName((yysemantic_stack_[(2) - (2)].stringVal));
-                driver.program->setLineNo(yylloc->begin.line);
+                driver.program->setLineNo(yylloc.begin.line);
         }
     break;
 
   case 3:
 
 /* Line 678 of lalr1.cc  */
-#line 132 "minipascal_parser.yy"
+#line 158 "minipascal_parser.yy"
     {
-                dirver.program->setIds((yysemantic_stack_[(11) - (5)].id_list));
+                driver.program->setIds((yysemantic_stack_[(11) - (5)].id_list));
                 driver.program->setDecls((yysemantic_stack_[(11) - (8)].decls_list));
                 driver.program->setMhds((yysemantic_stack_[(11) - (9)].mhd_list));
                 driver.program->setBlock((yysemantic_stack_[(11) - (10)].block));
@@ -476,7 +477,7 @@ namespace minipascal {
   case 4:
 
 /* Line 678 of lalr1.cc  */
-#line 143 "minipascal_parser.yy"
+#line 169 "minipascal_parser.yy"
     {
                 (yyval.id_list) = new Id_list();
                 (yyval.id_list)->push_back((yysemantic_stack_[(1) - (1)].stringVal));
@@ -486,7 +487,7 @@ namespace minipascal {
   case 5:
 
 /* Line 678 of lalr1.cc  */
-#line 148 "minipascal_parser.yy"
+#line 174 "minipascal_parser.yy"
     {
                 (yysemantic_stack_[(3) - (1)].id_list)->push_back((yysemantic_stack_[(3) - (3)].stringVal));
                 (yyval.id_list) = (yysemantic_stack_[(3) - (1)].id_list);
@@ -496,7 +497,7 @@ namespace minipascal {
   case 6:
 
 /* Line 678 of lalr1.cc  */
-#line 153 "minipascal_parser.yy"
+#line 179 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ','");
 	}
@@ -505,7 +506,7 @@ namespace minipascal {
   case 7:
 
 /* Line 678 of lalr1.cc  */
-#line 157 "minipascal_parser.yy"
+#line 183 "minipascal_parser.yy"
     {
                 (yysemantic_stack_[(4) - (1)].id_list)->push_back((yysemantic_stack_[(4) - (4)].stringVal));
                 (yyval.id_list) = (yysemantic_stack_[(4) - (1)].id_list);
@@ -515,14 +516,15 @@ namespace minipascal {
   case 8:
 
 /* Line 678 of lalr1.cc  */
-#line 165 "minipascal_parser.yy"
+#line 191 "minipascal_parser.yy"
     {
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = (yysemantic_stack_[(6) - (3)].id_list)->begin(); it != (yysemantic_stack_[(6) - (3)].id_list)->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, (yysemantic_stack_[(6) - (5)].type));
-                        declaration->setLineNo(yylloc->begin.line);
-                        (yysemantic_stack_[(6) - (1)].decls_list)->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, (yysemantic_stack_[(6) - (5)].type)));
+                        sharedeclaration->setLineNo(yylloc.begin.line);
+                        (yysemantic_stack_[(6) - (1)].decls_list)->push_back(sharedeclaration);
                 }
                 (yyval.decls_list) = (yysemantic_stack_[(6) - (1)].decls_list);
         }
@@ -531,7 +533,7 @@ namespace minipascal {
   case 9:
 
 /* Line 678 of lalr1.cc  */
-#line 176 "minipascal_parser.yy"
+#line 203 "minipascal_parser.yy"
     {
                 (yyval.decls_list) = new Decls_list();
         }
@@ -540,7 +542,7 @@ namespace minipascal {
   case 10:
 
 /* Line 678 of lalr1.cc  */
-#line 180 "minipascal_parser.yy"
+#line 207 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : var");
         }
@@ -549,7 +551,7 @@ namespace minipascal {
   case 11:
 
 /* Line 678 of lalr1.cc  */
-#line 184 "minipascal_parser.yy"
+#line 211 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ':'");
 	}
@@ -558,7 +560,7 @@ namespace minipascal {
   case 12:
 
 /* Line 678 of lalr1.cc  */
-#line 188 "minipascal_parser.yy"
+#line 215 "minipascal_parser.yy"
     {
         }
     break;
@@ -566,7 +568,7 @@ namespace minipascal {
   case 13:
 
 /* Line 678 of lalr1.cc  */
-#line 191 "minipascal_parser.yy"
+#line 218 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ';'");
         }
@@ -575,7 +577,7 @@ namespace minipascal {
   case 14:
 
 /* Line 678 of lalr1.cc  */
-#line 198 "minipascal_parser.yy"
+#line 225 "minipascal_parser.yy"
     {
                 (yyval.type) = (yysemantic_stack_[(1) - (1)].type);
         }
@@ -584,7 +586,7 @@ namespace minipascal {
   case 15:
 
 /* Line 678 of lalr1.cc  */
-#line 202 "minipascal_parser.yy"
+#line 229 "minipascal_parser.yy"
     {
                 ArrayType* temp = new ArrayType((yysemantic_stack_[(8) - (8)].type));
                 ArrayType::Range range = ArrayType::Range((yysemantic_stack_[(8) - (3)].integerVal), (yysemantic_stack_[(8) - (5)].integerVal));
@@ -596,7 +598,7 @@ namespace minipascal {
   case 16:
 
 /* Line 678 of lalr1.cc  */
-#line 209 "minipascal_parser.yy"
+#line 236 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss '['");
         }
@@ -605,7 +607,7 @@ namespace minipascal {
   case 17:
 
 /* Line 678 of lalr1.cc  */
-#line 213 "minipascal_parser.yy"
+#line 240 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss '..'");
         }
@@ -614,7 +616,7 @@ namespace minipascal {
   case 18:
 
 /* Line 678 of lalr1.cc  */
-#line 217 "minipascal_parser.yy"
+#line 244 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ']'");
         }
@@ -623,7 +625,7 @@ namespace minipascal {
   case 19:
 
 /* Line 678 of lalr1.cc  */
-#line 221 "minipascal_parser.yy"
+#line 248 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : of");
         }
@@ -632,29 +634,28 @@ namespace minipascal {
   case 20:
 
 /* Line 678 of lalr1.cc  */
-#line 228 "minipascal_parser.yy"
+#line 255 "minipascal_parser.yy"
     {
-                (yyval.type) = new Type();
-                (yyval.type)->setBuildInType(INT_T);
+                (yyval.type) = new IntType();
         }
     break;
 
   case 21:
 
 /* Line 678 of lalr1.cc  */
-#line 233 "minipascal_parser.yy"
+#line 259 "minipascal_parser.yy"
     {
-                (yyval.type) = new Type();
-                (yyval.type)->setBuildInType(DOUBLE_T);
+                (yyval.type) = new RealType();
         }
     break;
 
   case 22:
 
 /* Line 678 of lalr1.cc  */
-#line 241 "minipascal_parser.yy"
+#line 266 "minipascal_parser.yy"
     {
-                (yysemantic_stack_[(3) - (1)].mhd_list)->push_back((yysemantic_stack_[(3) - (2)].methoddecl));
+                ShareNMethodDeclaration share = ShareNMethodDeclaration((yysemantic_stack_[(3) - (2)].methoddecl));
+                (yysemantic_stack_[(3) - (1)].mhd_list)->push_back(share);
                 (yyval.mhd_list) = (yysemantic_stack_[(3) - (1)].mhd_list);
         }
     break;
@@ -662,7 +663,7 @@ namespace minipascal {
   case 23:
 
 /* Line 678 of lalr1.cc  */
-#line 246 "minipascal_parser.yy"
+#line 272 "minipascal_parser.yy"
     {
                 (yyval.mhd_list) = new Mhd_list();
         }
@@ -671,10 +672,8 @@ namespace minipascal {
   case 24:
 
 /* Line 678 of lalr1.cc  */
-#line 250 "minipascal_parser.yy"
+#line 276 "minipascal_parser.yy"
     {
-                (yysemantic_stack_[(3) - (1)].mhd_list)->push_back((yysemantic_stack_[(3) - (2)].methoddecl));
-                (yyval.mhd_list) = (yysemantic_stack_[(3) - (1)].mhd_list);
                 error(yylloc, " Error: miss ';'");
         }
     break;
@@ -682,7 +681,7 @@ namespace minipascal {
   case 25:
 
 /* Line 678 of lalr1.cc  */
-#line 259 "minipascal_parser.yy"
+#line 283 "minipascal_parser.yy"
     {
                 (yysemantic_stack_[(3) - (1)].methoddecl)->setDecl((yysemantic_stack_[(3) - (2)].decls_list));
                 (yysemantic_stack_[(3) - (1)].methoddecl)->setBlock((yysemantic_stack_[(3) - (3)].block));
@@ -693,27 +692,34 @@ namespace minipascal {
   case 26:
 
 /* Line 678 of lalr1.cc  */
-#line 268 "minipascal_parser.yy"
+#line 292 "minipascal_parser.yy"
     {
-                (yyval.methoddecl) = new NMethodDeclaration((yysemantic_stack_[(6) - (2)].stringVal), (yysemantic_stack_[(6) - (3)].decls_list), (yysemantic_stack_[(6) - (5)].type));
+                (yyval.methoddecl) = new NMethodDeclaration();
+                (yyval.methoddecl)->setName((yysemantic_stack_[(6) - (2)].stringVal));
+                (yyval.methoddecl)->setArgs((yysemantic_stack_[(6) - (3)].decls_list));
+                (yyval.methoddecl)->setType((yysemantic_stack_[(6) - (5)].type));
+                (yyval.methoddecl)->setLineNo(yylloc.begin.line);
         }
     break;
 
   case 27:
 
 /* Line 678 of lalr1.cc  */
-#line 272 "minipascal_parser.yy"
+#line 300 "minipascal_parser.yy"
     {
-                Type* temp = new Type();
-                temp->setBuildInType(VOID_T);
-                (yyval.methoddecl) = new NMethodDeclaration((yysemantic_stack_[(4) - (2)].stringVal), (yysemantic_stack_[(4) - (3)].decls_list), temp);
+                VoidType* temp = new VoidType();
+                (yyval.methoddecl) = new NMethodDeclaration();
+                (yyval.methoddecl)->setName((yysemantic_stack_[(4) - (2)].stringVal));
+                (yyval.methoddecl)->setArgs((yysemantic_stack_[(4) - (3)].decls_list));
+                (yyval.methoddecl)->setType(temp);
+                (yyval.methoddecl)->setLineNo(yylloc.begin.line);
         }
     break;
 
   case 28:
 
 /* Line 678 of lalr1.cc  */
-#line 281 "minipascal_parser.yy"
+#line 312 "minipascal_parser.yy"
     {
                 (yyval.decls_list) = (yysemantic_stack_[(3) - (2)].decls_list);
         }
@@ -722,7 +728,7 @@ namespace minipascal {
   case 29:
 
 /* Line 678 of lalr1.cc  */
-#line 285 "minipascal_parser.yy"
+#line 316 "minipascal_parser.yy"
     {
                 (yyval.decls_list) = new Decls_list();
         }
@@ -731,7 +737,7 @@ namespace minipascal {
   case 30:
 
 /* Line 678 of lalr1.cc  */
-#line 289 "minipascal_parser.yy"
+#line 320 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ')'");
         }
@@ -740,14 +746,15 @@ namespace minipascal {
   case 31:
 
 /* Line 678 of lalr1.cc  */
-#line 296 "minipascal_parser.yy"
+#line 327 "minipascal_parser.yy"
     {
                 (yyval.decls_list) = new Decls_list();
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = (yysemantic_stack_[(3) - (1)].id_list)->begin(); it != (yysemantic_stack_[(3) - (1)].id_list)->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, (yysemantic_stack_[(3) - (3)].type));
-                        (yyval.decls_list)->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, (yysemantic_stack_[(3) - (3)].type)));
+                        (yyval.decls_list)->push_back(sharedeclaration);
                 }
         }
     break;
@@ -755,13 +762,14 @@ namespace minipascal {
   case 32:
 
 /* Line 678 of lalr1.cc  */
-#line 306 "minipascal_parser.yy"
+#line 338 "minipascal_parser.yy"
     {
                 NVariableDeclaration* declaration;
+                ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = (yysemantic_stack_[(5) - (3)].id_list)->begin(); it != (yysemantic_stack_[(5) - (3)].id_list)->end(); ++it)
                 {
-                        declaration = new NVariableDeclaration(*it, (yysemantic_stack_[(5) - (5)].type));
-                        (yysemantic_stack_[(5) - (1)].decls_list)->push_back(declaration);
+                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, (yysemantic_stack_[(5) - (5)].type)));
+                        (yysemantic_stack_[(5) - (1)].decls_list)->push_back(sharedeclaration);
                 }
                 (yyval.decls_list) = (yysemantic_stack_[(5) - (1)].decls_list);
         }
@@ -770,7 +778,7 @@ namespace minipascal {
   case 33:
 
 /* Line 678 of lalr1.cc  */
-#line 316 "minipascal_parser.yy"
+#line 349 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ':'");
         }
@@ -779,7 +787,7 @@ namespace minipascal {
   case 34:
 
 /* Line 678 of lalr1.cc  */
-#line 320 "minipascal_parser.yy"
+#line 353 "minipascal_parser.yy"
     {
         }
     break;
@@ -787,7 +795,7 @@ namespace minipascal {
   case 35:
 
 /* Line 678 of lalr1.cc  */
-#line 323 "minipascal_parser.yy"
+#line 356 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ';'");
         }
@@ -796,7 +804,7 @@ namespace minipascal {
   case 36:
 
 /* Line 678 of lalr1.cc  */
-#line 327 "minipascal_parser.yy"
+#line 360 "minipascal_parser.yy"
     {
         }
     break;
@@ -804,7 +812,7 @@ namespace minipascal {
   case 37:
 
 /* Line 678 of lalr1.cc  */
-#line 330 "minipascal_parser.yy"
+#line 363 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ':'");
         }
@@ -813,7 +821,7 @@ namespace minipascal {
   case 38:
 
 /* Line 678 of lalr1.cc  */
-#line 334 "minipascal_parser.yy"
+#line 367 "minipascal_parser.yy"
     {
         }
     break;
@@ -821,7 +829,7 @@ namespace minipascal {
   case 39:
 
 /* Line 678 of lalr1.cc  */
-#line 340 "minipascal_parser.yy"
+#line 373 "minipascal_parser.yy"
     {
                 (yyval.block) = new NBlock((yysemantic_stack_[(3) - (2)].stmt_list));
         }
@@ -830,7 +838,7 @@ namespace minipascal {
   case 40:
 
 /* Line 678 of lalr1.cc  */
-#line 344 "minipascal_parser.yy"
+#line 377 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : end");
         }
@@ -839,7 +847,7 @@ namespace minipascal {
   case 41:
 
 /* Line 678 of lalr1.cc  */
-#line 351 "minipascal_parser.yy"
+#line 384 "minipascal_parser.yy"
     {
                 (yyval.stmt_list) = (yysemantic_stack_[(1) - (1)].stmt_list);
         }
@@ -848,7 +856,7 @@ namespace minipascal {
   case 42:
 
 /* Line 678 of lalr1.cc  */
-#line 355 "minipascal_parser.yy"
+#line 388 "minipascal_parser.yy"
     {
                 (yyval.stmt_list) = new Stmt_list();
         }
@@ -857,19 +865,19 @@ namespace minipascal {
   case 43:
 
 /* Line 678 of lalr1.cc  */
-#line 362 "minipascal_parser.yy"
+#line 395 "minipascal_parser.yy"
     {
                 (yyval.stmt_list) = new Stmt_list();
-                (yyval.stmt_list)->push_back((yysemantic_stack_[(1) - (1)].stmt));
+                (yyval.stmt_list)->push_back(ShareNStatement((yysemantic_stack_[(1) - (1)].stmt)));
         }
     break;
 
   case 44:
 
 /* Line 678 of lalr1.cc  */
-#line 367 "minipascal_parser.yy"
+#line 400 "minipascal_parser.yy"
     {
-                (yysemantic_stack_[(3) - (1)].stmt_list)->push_back((yysemantic_stack_[(3) - (3)].stmt));
+                (yysemantic_stack_[(3) - (1)].stmt_list)->push_back(ShareNStatement((yysemantic_stack_[(3) - (3)].stmt)));
                 (yyval.stmt_list) = (yysemantic_stack_[(3) - (1)].stmt_list);
         }
     break;
@@ -877,7 +885,7 @@ namespace minipascal {
   case 45:
 
 /* Line 678 of lalr1.cc  */
-#line 375 "minipascal_parser.yy"
+#line 408 "minipascal_parser.yy"
     {
                 (yyval.stmt) = new NAssignment((yysemantic_stack_[(3) - (1)].var), (yysemantic_stack_[(3) - (3)].exps));
         }
@@ -886,7 +894,7 @@ namespace minipascal {
   case 46:
 
 /* Line 678 of lalr1.cc  */
-#line 379 "minipascal_parser.yy"
+#line 412 "minipascal_parser.yy"
     {
                 NStatementExpression* temp = new NStatementExpression((yysemantic_stack_[(1) - (1)].methodcall));
                 (yyval.stmt) = temp;
@@ -896,7 +904,7 @@ namespace minipascal {
   case 47:
 
 /* Line 678 of lalr1.cc  */
-#line 384 "minipascal_parser.yy"
+#line 417 "minipascal_parser.yy"
     {
                 (yyval.stmt) = (yysemantic_stack_[(1) - (1)].block);
         }
@@ -905,7 +913,7 @@ namespace minipascal {
   case 48:
 
 /* Line 678 of lalr1.cc  */
-#line 388 "minipascal_parser.yy"
+#line 421 "minipascal_parser.yy"
     {
                 (yyval.stmt) = new NControl((yysemantic_stack_[(6) - (2)].exps), (yysemantic_stack_[(6) - (4)].stmt), (yysemantic_stack_[(6) - (6)].stmt));
         }
@@ -914,7 +922,7 @@ namespace minipascal {
   case 49:
 
 /* Line 678 of lalr1.cc  */
-#line 392 "minipascal_parser.yy"
+#line 425 "minipascal_parser.yy"
     {
                 (yyval.stmt) = new NLoop((yysemantic_stack_[(4) - (2)].exps), (yysemantic_stack_[(4) - (4)].stmt));
         }
@@ -923,7 +931,7 @@ namespace minipascal {
   case 50:
 
 /* Line 678 of lalr1.cc  */
-#line 396 "minipascal_parser.yy"
+#line 429 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : then");
         }
@@ -932,7 +940,7 @@ namespace minipascal {
   case 51:
 
 /* Line 678 of lalr1.cc  */
-#line 400 "minipascal_parser.yy"
+#line 433 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : else");
         }
@@ -941,7 +949,7 @@ namespace minipascal {
   case 52:
 
 /* Line 678 of lalr1.cc  */
-#line 404 "minipascal_parser.yy"
+#line 437 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss keyword : do");
         }
@@ -950,9 +958,10 @@ namespace minipascal {
   case 53:
 
 /* Line 678 of lalr1.cc  */
-#line 411 "minipascal_parser.yy"
+#line 444 "minipascal_parser.yy"
     {
-                (yyval.var) = new NVariable((yysemantic_stack_[(2) - (1)].stringVal));
+                (yyval.var) = new NVariable();
+                (yyval.var)->setName((yysemantic_stack_[(2) - (1)].stringVal));
                 (yyval.var)->setExps((yysemantic_stack_[(2) - (2)].exps_list));
         }
     break;
@@ -960,9 +969,10 @@ namespace minipascal {
   case 54:
 
 /* Line 678 of lalr1.cc  */
-#line 419 "minipascal_parser.yy"
+#line 453 "minipascal_parser.yy"
     {
-                (yysemantic_stack_[(4) - (4)].exps_list)->push_front((yysemantic_stack_[(4) - (2)].exps));
+                ShareNExpression shareexpression = ShareNExpression((yysemantic_stack_[(4) - (2)].exps));
+                (yysemantic_stack_[(4) - (4)].exps_list)->push_front(shareexpression);
                 (yyval.exps_list) = (yysemantic_stack_[(4) - (4)].exps_list);
         }
     break;
@@ -970,7 +980,7 @@ namespace minipascal {
   case 55:
 
 /* Line 678 of lalr1.cc  */
-#line 424 "minipascal_parser.yy"
+#line 459 "minipascal_parser.yy"
     {
                 (yyval.exps_list) = new Exps_list();
         }
@@ -979,7 +989,7 @@ namespace minipascal {
   case 56:
 
 /* Line 678 of lalr1.cc  */
-#line 428 "minipascal_parser.yy"
+#line 463 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ']'");
         }
@@ -988,7 +998,7 @@ namespace minipascal {
   case 57:
 
 /* Line 678 of lalr1.cc  */
-#line 435 "minipascal_parser.yy"
+#line 470 "minipascal_parser.yy"
     {
                 (yyval.methodcall) = new NMethodCall((yysemantic_stack_[(1) - (1)].stringVal), new Exps_list());
         }
@@ -997,7 +1007,7 @@ namespace minipascal {
   case 58:
 
 /* Line 678 of lalr1.cc  */
-#line 439 "minipascal_parser.yy"
+#line 474 "minipascal_parser.yy"
     {
                 (yyval.methodcall) = new NMethodCall((yysemantic_stack_[(4) - (1)].stringVal), (yysemantic_stack_[(4) - (3)].exps_list));
         }
@@ -1006,7 +1016,7 @@ namespace minipascal {
   case 59:
 
 /* Line 678 of lalr1.cc  */
-#line 443 "minipascal_parser.yy"
+#line 478 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ')'");
         }
@@ -1015,19 +1025,19 @@ namespace minipascal {
   case 60:
 
 /* Line 678 of lalr1.cc  */
-#line 450 "minipascal_parser.yy"
+#line 485 "minipascal_parser.yy"
     {
                 (yyval.exps_list) = new Exps_list();
-                (yyval.exps_list)->push_back((yysemantic_stack_[(1) - (1)].exps));
+                (yyval.exps_list)->push_back(ShareNExpression((yysemantic_stack_[(1) - (1)].exps)));
         }
     break;
 
   case 61:
 
 /* Line 678 of lalr1.cc  */
-#line 455 "minipascal_parser.yy"
+#line 490 "minipascal_parser.yy"
     {
-                (yysemantic_stack_[(3) - (1)].exps_list)->push_back((yysemantic_stack_[(3) - (3)].exps));
+                (yysemantic_stack_[(3) - (1)].exps_list)->push_back(ShareNExpression((yysemantic_stack_[(3) - (3)].exps)));
                 (yyval.exps_list) = (yysemantic_stack_[(3) - (1)].exps_list);
         }
     break;
@@ -1035,7 +1045,7 @@ namespace minipascal {
   case 62:
 
 /* Line 678 of lalr1.cc  */
-#line 460 "minipascal_parser.yy"
+#line 495 "minipascal_parser.yy"
     {
                 error(yylloc, " Error: miss ',' between two expressions");
         }
@@ -1044,7 +1054,7 @@ namespace minipascal {
   case 63:
 
 /* Line 678 of lalr1.cc  */
-#line 467 "minipascal_parser.yy"
+#line 502 "minipascal_parser.yy"
     {
                 (yyval.exps) = (yysemantic_stack_[(1) - (1)].exps);
         }
@@ -1053,16 +1063,16 @@ namespace minipascal {
   case 64:
 
 /* Line 678 of lalr1.cc  */
-#line 471 "minipascal_parser.yy"
+#line 506 "minipascal_parser.yy"
     {
-                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (3)].exps));
+                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (3)].exps));
         }
     break;
 
   case 65:
 
 /* Line 678 of lalr1.cc  */
-#line 478 "minipascal_parser.yy"
+#line 513 "minipascal_parser.yy"
     {
                 (yyval.exps) = (yysemantic_stack_[(1) - (1)].exps);
         }
@@ -1071,16 +1081,16 @@ namespace minipascal {
   case 66:
 
 /* Line 678 of lalr1.cc  */
-#line 482 "minipascal_parser.yy"
+#line 517 "minipascal_parser.yy"
     {
-                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (3)].exps));
+                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (3)].exps));
         }
     break;
 
   case 67:
 
 /* Line 678 of lalr1.cc  */
-#line 489 "minipascal_parser.yy"
+#line 524 "minipascal_parser.yy"
     {
                 (yyval.exps) = (yysemantic_stack_[(1) - (1)].exps);
         }
@@ -1089,18 +1099,19 @@ namespace minipascal {
   case 68:
 
 /* Line 678 of lalr1.cc  */
-#line 493 "minipascal_parser.yy"
+#line 528 "minipascal_parser.yy"
     {
-                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (3)].exps));
+                (yyval.exps) = new NBinaryOperator((yysemantic_stack_[(3) - (2)].op), (yysemantic_stack_[(3) - (1)].exps), (yysemantic_stack_[(3) - (3)].exps));
         }
     break;
 
   case 69:
 
 /* Line 678 of lalr1.cc  */
-#line 500 "minipascal_parser.yy"
+#line 535 "minipascal_parser.yy"
     {
-                NVariable* var = new NVariable((yysemantic_stack_[(2) - (1)].stringVal));
+                NVariable* var = new NVariable();
+                var->setName((yysemantic_stack_[(2) - (1)].stringVal));
                 var->setExps((yysemantic_stack_[(2) - (2)].exps_list));
                 (yyval.exps) = var;
         }
@@ -1109,7 +1120,7 @@ namespace minipascal {
   case 70:
 
 /* Line 678 of lalr1.cc  */
-#line 506 "minipascal_parser.yy"
+#line 542 "minipascal_parser.yy"
     {
                 (yyval.exps) = new NMethodCall((yysemantic_stack_[(4) - (1)].stringVal), (yysemantic_stack_[(4) - (3)].exps_list));
         }
@@ -1118,7 +1129,7 @@ namespace minipascal {
   case 71:
 
 /* Line 678 of lalr1.cc  */
-#line 510 "minipascal_parser.yy"
+#line 546 "minipascal_parser.yy"
     {
                 (yyval.exps) = (yysemantic_stack_[(1) - (1)].value);
         }
@@ -1127,16 +1138,16 @@ namespace minipascal {
   case 72:
 
 /* Line 678 of lalr1.cc  */
-#line 514 "minipascal_parser.yy"
+#line 550 "minipascal_parser.yy"
     {
-                (yyval.exps) = new NString(*(yysemantic_stack_[(1) - (1)].stringVal));
+                (yyval.exps) = new NString((yysemantic_stack_[(1) - (1)].stringVal));
         }
     break;
 
   case 73:
 
 /* Line 678 of lalr1.cc  */
-#line 518 "minipascal_parser.yy"
+#line 554 "minipascal_parser.yy"
     {
                 (yyval.exps) = (yysemantic_stack_[(3) - (2)].exps);
         }
@@ -1145,7 +1156,7 @@ namespace minipascal {
   case 74:
 
 /* Line 678 of lalr1.cc  */
-#line 522 "minipascal_parser.yy"
+#line 558 "minipascal_parser.yy"
     {
                 (yysemantic_stack_[(2) - (2)].exps)->setOpposite();
                 (yyval.exps) = (yysemantic_stack_[(2) - (2)].exps);
@@ -1155,7 +1166,7 @@ namespace minipascal {
   case 75:
 
 /* Line 678 of lalr1.cc  */
-#line 530 "minipascal_parser.yy"
+#line 566 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::ADD;
         }
@@ -1164,7 +1175,7 @@ namespace minipascal {
   case 76:
 
 /* Line 678 of lalr1.cc  */
-#line 534 "minipascal_parser.yy"
+#line 570 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::SUB;
         }
@@ -1173,7 +1184,7 @@ namespace minipascal {
   case 77:
 
 /* Line 678 of lalr1.cc  */
-#line 540 "minipascal_parser.yy"
+#line 576 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::MUL;
         }
@@ -1182,7 +1193,7 @@ namespace minipascal {
   case 78:
 
 /* Line 678 of lalr1.cc  */
-#line 544 "minipascal_parser.yy"
+#line 580 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::DIV;
         }
@@ -1191,7 +1202,7 @@ namespace minipascal {
   case 79:
 
 /* Line 678 of lalr1.cc  */
-#line 551 "minipascal_parser.yy"
+#line 587 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::LT;
         }
@@ -1200,7 +1211,7 @@ namespace minipascal {
   case 80:
 
 /* Line 678 of lalr1.cc  */
-#line 555 "minipascal_parser.yy"
+#line 591 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::GT;
         }
@@ -1209,7 +1220,7 @@ namespace minipascal {
   case 81:
 
 /* Line 678 of lalr1.cc  */
-#line 559 "minipascal_parser.yy"
+#line 595 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::EQ;
         }
@@ -1218,7 +1229,7 @@ namespace minipascal {
   case 82:
 
 /* Line 678 of lalr1.cc  */
-#line 563 "minipascal_parser.yy"
+#line 599 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::LE;
         }
@@ -1227,7 +1238,7 @@ namespace minipascal {
   case 83:
 
 /* Line 678 of lalr1.cc  */
-#line 567 "minipascal_parser.yy"
+#line 603 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::GE;
         }
@@ -1236,7 +1247,7 @@ namespace minipascal {
   case 84:
 
 /* Line 678 of lalr1.cc  */
-#line 571 "minipascal_parser.yy"
+#line 607 "minipascal_parser.yy"
     {
                 (yyval.op) = NBinaryOperator::NE;
         }
@@ -1245,7 +1256,7 @@ namespace minipascal {
   case 85:
 
 /* Line 678 of lalr1.cc  */
-#line 578 "minipascal_parser.yy"
+#line 614 "minipascal_parser.yy"
     {
                 (yyval.value) = new NInt((yysemantic_stack_[(1) - (1)].integerVal));
         }
@@ -1254,7 +1265,7 @@ namespace minipascal {
   case 86:
 
 /* Line 678 of lalr1.cc  */
-#line 582 "minipascal_parser.yy"
+#line 618 "minipascal_parser.yy"
     {
                 (yyval.value) = new NDouble((yysemantic_stack_[(1) - (1)].doubleVal));
         }
@@ -1263,7 +1274,7 @@ namespace minipascal {
   case 87:
 
 /* Line 678 of lalr1.cc  */
-#line 586 "minipascal_parser.yy"
+#line 622 "minipascal_parser.yy"
     {
                 (yyval.value) = new NInt(-(yysemantic_stack_[(2) - (2)].integerVal));
         }
@@ -1272,7 +1283,7 @@ namespace minipascal {
   case 88:
 
 /* Line 678 of lalr1.cc  */
-#line 590 "minipascal_parser.yy"
+#line 626 "minipascal_parser.yy"
     {
                 (yyval.value) = new NDouble(-(yysemantic_stack_[(2) - (2)].doubleVal));
         }
@@ -1281,7 +1292,7 @@ namespace minipascal {
 
 
 /* Line 678 of lalr1.cc  */
-#line 1285 "minipascal_parser.cpp"
+#line 1296 "minipascal_parser.cpp"
 	default:
           break;
       }
@@ -1762,15 +1773,15 @@ namespace minipascal {
   const unsigned short int
   Parser::yyrline_[] =
   {
-         0,   126,   126,   125,   142,   147,   153,   152,   164,   176,
-     179,   184,   183,   190,   197,   201,   208,   212,   216,   220,
-     227,   232,   240,   246,   249,   258,   267,   271,   280,   285,
-     288,   295,   305,   316,   315,   323,   322,   330,   329,   339,
-     343,   350,   355,   361,   366,   374,   378,   383,   387,   391,
-     395,   399,   403,   410,   418,   424,   427,   434,   438,   442,
-     449,   454,   459,   466,   470,   477,   481,   488,   492,   499,
-     505,   509,   513,   517,   521,   529,   533,   539,   543,   550,
-     554,   558,   562,   566,   570,   577,   581,   585,   589
+         0,   152,   152,   151,   168,   173,   179,   178,   190,   203,
+     206,   211,   210,   217,   224,   228,   235,   239,   243,   247,
+     254,   258,   265,   272,   275,   282,   291,   299,   311,   316,
+     319,   326,   337,   349,   348,   356,   355,   363,   362,   372,
+     376,   383,   388,   394,   399,   407,   411,   416,   420,   424,
+     428,   432,   436,   443,   452,   459,   462,   469,   473,   477,
+     484,   489,   494,   501,   505,   512,   516,   523,   527,   534,
+     541,   545,   549,   553,   557,   565,   569,   575,   579,   586,
+     590,   594,   598,   602,   606,   613,   617,   621,   625
   };
 
   // Print the state stack on the debug stream.
@@ -1863,11 +1874,11 @@ namespace minipascal {
 } // minipascal
 
 /* Line 1054 of lalr1.cc  */
-#line 1867 "minipascal_parser.cpp"
+#line 1878 "minipascal_parser.cpp"
 
 
 /* Line 1056 of lalr1.cc  */
-#line 594 "minipascal_parser.yy"
+#line 630 "minipascal_parser.yy"
 
 
 void minipascal::Parser::error(const Parser::location_type& l, const std::string& m)

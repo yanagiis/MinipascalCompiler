@@ -1,6 +1,6 @@
 #include "minipascal_nint.h"
 
-#include <string.h>
+#include <stdio.h>
 
 minipascal::NInt::NInt(int value)
 {
