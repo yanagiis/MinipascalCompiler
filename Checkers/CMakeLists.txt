@@ -1,0 +1,7 @@
+project(MinipascalCheckers)
+cmake_minimum_required(VERSION 2.8)
+include_directories(../Nodes)
+add_definitions(-I/usr/include  -DNDEBUG -D_GNU_SOURCE -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -O3)
+add_definitions(-L/usr/lib/llvm  -lpthread -lffi -ldl -lm)
+add_library(minipascalcheckers typevisitor.cpp symbol.cpp codegencontext.cpp codegenblock.cpp initializevisitor.cpp)
+target_link_libraries(minipascalcheckers "/usr/lib/llvm/libLLVM-2.8.so")
