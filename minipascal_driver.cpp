@@ -53,6 +53,11 @@ namespace minipascal{
                 TypeVisitor visitor = TypeVisitor();
                 visitor.visit(program);
         }
+        
+        bool Driver::codeGen()
+        {
+                
+        }
 
 	void Driver::error(const class location& l, const std::string& m)
 	{

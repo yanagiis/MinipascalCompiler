@@ -159,9 +159,18 @@ void minipascal::TypeVisitor::visit(minipascal::NVariable* node)
         {
                 (*it)->accept(this);
         }
+        
+        // index check
         for(it = exps->begin(); it != exps->end(); ++it)
         {
-                (*it)->getType();
+                IntType temp;
+                if(!((*it)->getType()->compare(&temp)))
+                {
+                        showError("array index not int type", node);
+                        node->setFail(true);
+                        return;
+                }
+                
         }
 }
 

@@ -120,9 +120,23 @@ void minipascal::InitializeVisitor::visit(minipascal::NMethodCall* node)
         node->setType(it->second->declaration->getType());
         
         const minipascal::Exps_list* exps = node->getExps();
-        for(minipascal::Exps_list::const_iterator it = exps->begin(); it != exps->end(); ++it)
+        minipascal::Exps_list::const_iterator eit;
+        for(eit = exps->begin(); eit != exps->end(); ++eit)
         {
                 (*it)->accept(this);
+        }
+        
+        // args check
+        try{
+                NMethodDeclaration* method = (NMethodDeclaration*)it->second->declaration;
+                Decls_list* decls = method->getDecl();
+                Decls_list::iterator dit;
+                for(dit = decls->begin(), eit = exps->begin(); dit != decls->end() && eit != exps->end(); ++eit, ++dit)
+                {
+                        // TODO function arguments check
+                }
+        }catch(std::bad_cast& e){
+                
         }
 }
 
@@ -222,6 +236,30 @@ void minipascal::InitializeVisitor::visit(minipascal::NVariable* node)
                                         showError("Variable " + node->getName() + " wrong dimention", node);
                                         node->setFail(true);
                                         return;
+                                }
+                        }
+                        
+                        int i= 0;
+                        for(Exps_list::iterator it = exps->begin(); it != exps->end(); ++i, ++it)
+                        {
+                                // if index is a constant
+                                try{
+                                        NType* type = sit->second->declaration->getType();
+                                        ArrayType* arraytype = boost::polymorphic_cast<ArrayType*>(type);
+                                        ArrayType::Range range = arraytype->getRange();
+                                        // Is index out of range?
+                                        NInt* constant = boost::polymorphic_cast<NInt*>(it->get());
+                                        int index = constant->getValue();
+                                        if(index < range.first || index > range.second)
+                                        {
+                                                char num[3];
+                                                int count = sprintf(num, "%d", i);
+                                                std::string numstr = std::string(num, count);
+                                                showError("Variable " + node->getName() + "'s index["+ numstr +"] out of range", node);
+                                                node->setFail(true);
+                                        }
+                                }catch(std::bad_cast& e){
+                                        // do nothing 
                                 }
                         }
                         node->setType(type);

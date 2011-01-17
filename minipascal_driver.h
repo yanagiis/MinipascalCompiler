@@ -19,6 +19,7 @@ namespace minipascal {
                         bool parse_stream(std::istream& in, const std::string& sname);
                         bool declarationChecking() throw();
                         bool typeChecking();
+                        bool codeGen();
 			void error(const class location& l, const std::string& m);
 			void error(const std::string& m);
 
