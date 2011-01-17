@@ -25,6 +25,7 @@ namespace minipascal {
                 ShareNBlock getBlock();
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 Id_list* ids;
                 Decls_list* decl_list;

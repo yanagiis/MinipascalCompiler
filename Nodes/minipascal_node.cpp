@@ -1,8 +1,10 @@
 #include "minipascal_node.h"
 
+#include "minipascal_visitor.h"
+
 void minipascal::Node::accept(minipascal::Visitor* visitor)
 {
-        visitor->visit(this);
+        return visitor->visit(this);
 }
 
 bool minipascal::Node::getFail() const

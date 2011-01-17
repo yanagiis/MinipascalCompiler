@@ -12,11 +12,11 @@ namespace minipascal {
         public:
                 NExpression();
                 virtual ~NExpression();
-                const Type* getType();
-                void setType(minipascal::Type* type);
+                NType* getType();
+                void setType(minipascal::NType* type);
                 void setOpposite();
         private:
-                Type* type;
+                NType* type;
                 bool opposite;
         };
         typedef boost::shared_ptr< NExpression > ShareNExpression;

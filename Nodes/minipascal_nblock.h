@@ -12,9 +12,10 @@ namespace minipascal{
                 // set methods
                 void setStmts(Stmt_list* stmts);
                 // get methods
-                const Stmt_list* getStmts();
+                Stmt_list* getStmts();
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 Stmt_list* stmts;
         };

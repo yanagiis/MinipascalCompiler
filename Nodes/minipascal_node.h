@@ -7,8 +7,8 @@ namespace minipascal {
         class Visitor;
         class Node {
         public:
-                // vistor use
-                virtual void accept(Visitor* visitor);
+                // visitor use
+                virtual void accept(minipascal::Visitor* visitor);
                 // get methods
                 int getLineNo() const;
                 bool getFail() const;
@@ -23,7 +23,5 @@ namespace minipascal {
                 bool fail;
         };
 }
-
-#include "minipascal_visitor.h"
 
 #endif // MINIPASCAL_NODE_H

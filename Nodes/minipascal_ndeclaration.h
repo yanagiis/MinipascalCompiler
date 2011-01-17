@@ -13,18 +13,18 @@ namespace minipascal {
         public:
                 virtual ~NDeclaration();
                 //get methods
-                virtual std::string getName() const;
-                virtual const Type* getType() const;
+                virtual std::string getName();
+                virtual NType* getType();
                 //set methods
                 virtual void setName(const char* name);
                 virtual void setName(const std::string* name);
-                virtual void setType(const Type* type);
+                virtual void setType(minipascal::NType* type);
         protected:
                 NDeclaration();
-                NDeclaration(const std::string* name, const Type* type);
+                NDeclaration(const std::string* name, minipascal::NType* type);
         private:
                 std::string name;
-                const Type* type;
+                NType* type;
         };
         typedef boost::shared_ptr<NDeclaration> ShareNDeclaration;
         typedef std::vector<ShareNDeclaration> Decls_list;

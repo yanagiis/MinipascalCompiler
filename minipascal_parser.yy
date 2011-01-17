@@ -98,7 +98,7 @@
         Id_list* id_list;
         Index_list* index_list;
         
-        Type* type;
+        NType* type;
 }
 
 %{
@@ -330,7 +330,9 @@ parameter_list
                 ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = $1->begin(); it != $1->end(); ++it)
                 {
-                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, $3));
+                        declaration = new NVariableDeclaration(*it, $3);
+                        declaration->setLineNo(yylloc.begin.line);
+                        sharedeclaration = ShareNVariableDeclaration(declaration);
                         $$->push_back(sharedeclaration);
                 }
         }
@@ -340,7 +342,9 @@ parameter_list
                 ShareNVariableDeclaration sharedeclaration;
                 for(Id_list::iterator it = $3->begin(); it != $3->end(); ++it)
                 {
-                        sharedeclaration = ShareNVariableDeclaration(new NVariableDeclaration(*it, $5));
+                        declaration = new NVariableDeclaration(*it, $5);
+                        declaration->setLineNo(yylloc.begin.line);
+                        sharedeclaration = ShareNVariableDeclaration(declaration);
                         $1->push_back(sharedeclaration);
                 }
                 $$ = $1;
@@ -372,6 +376,7 @@ compound_statement
         : BEGAN optional_statements END
         {
                 $$ = new NBlock($2);
+                $$->setLineNo(yylloc.begin.line);
         }
         | BEGAN optional_statements error
         {
@@ -407,10 +412,12 @@ statement
         : variable ASSIGN expression
         {
                 $$ = new NAssignment($1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
         | procedure_statement
         {
                 NStatementExpression* temp = new NStatementExpression($1);
+                temp->setLineNo(yylloc.begin.line);
                 $$ = temp;
         }
         | compound_statement
@@ -420,10 +427,12 @@ statement
         | IF expression THEN statement ELSE statement
         {
                 $$ = new NControl($2, $4, $6);
+                $$->setLineNo(yylloc.begin.line);
         }
         | WHILE expression DO statement
         {
                 $$ = new NLoop($2, $4);
+                $$->setLineNo(yylloc.begin.line);
         }
         | IF expression error statement ELSE statement
         {
@@ -445,6 +454,7 @@ variable
                 $$ = new NVariable();
                 $$->setName($1);
                 $$->setExps($2);
+                $$->setLineNo(yylloc.begin.line);
         }
         ;
 
@@ -469,10 +479,12 @@ procedure_statement
         : ID
         {
                 $$ = new NMethodCall($1, new Exps_list());
+                $$->setLineNo(yylloc.begin.line);
         }
         | ID LPAREN expression_list RPAREN
         {
                 $$ = new NMethodCall($1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
         | ID LPAREN expression_list error
         {
@@ -505,6 +517,7 @@ expression
         | simple_expression relop simple_expression
         {
                 $$ = new NBinaryOperator($2, $1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
         ;
 
@@ -516,6 +529,7 @@ simple_expression
         | simple_expression addop term
         {
                 $$ = new NBinaryOperator($2, $1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
         ;
 
@@ -527,6 +541,7 @@ term
 	| term mulop factor
 	{
                 $$ = new NBinaryOperator($2, $1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
 	;
 
@@ -536,11 +551,13 @@ factor
                 NVariable* var = new NVariable();
                 var->setName($1);
                 var->setExps($2);
+                var->setLineNo(yylloc.begin.line);
                 $$ = var;
         }
 	| ID LPAREN expression_list RPAREN
 	{
                 $$ = new NMethodCall($1, $3);
+                $$->setLineNo(yylloc.begin.line);
         }
 	| num 
 	{
@@ -549,6 +566,7 @@ factor
 	| STRING
 	{
                 $$ = new NString($1);
+                $$->setLineNo(yylloc.begin.line);
         }
 	| LPAREN expression RPAREN
 	{
@@ -613,18 +631,22 @@ num
 	: INTEGER
 	{
                 $$ = new NInt($1);
+                $$->setLineNo(yylloc.begin.line);
         }
 	| REAL
 	{
                 $$ = new NDouble($1);
+                $$->setLineNo(yylloc.begin.line);
         }
 	| MINUS INTEGER
 	{
                 $$ = new NInt(-$2);
+                $$->setLineNo(yylloc.begin.line);
         }
 	| MINUS REAL
 	{
                 $$ = new NDouble(-$2);
+                $$->setLineNo(yylloc.begin.line);
         }
 	;
 %%

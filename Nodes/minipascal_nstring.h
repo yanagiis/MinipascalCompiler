@@ -14,6 +14,7 @@ namespace minipascal {
                 void setValue(std::string* value);
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 std::string value;
         };

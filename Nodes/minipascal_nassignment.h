@@ -18,6 +18,7 @@ namespace minipascal {
                 ShareNVariable getVar();
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 ShareNExpression exp;
                 ShareNVariable var;

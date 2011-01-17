@@ -1,13 +1,20 @@
 #include "minipascal_nmethoddeclaration.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NMethodDeclaration::NMethodDeclaration()
 {
-
+        setFail(false);
 }
 
 minipascal::NMethodDeclaration::~NMethodDeclaration()
 {
 
+}
+
+void minipascal::NMethodDeclaration::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 minipascal::Decls_list* minipascal::NMethodDeclaration::getArgs()
@@ -42,6 +49,6 @@ void minipascal::NMethodDeclaration::setBlock(NBlock* block)
 
 std::string minipascal::NMethodDeclaration::getOutput()
 {
-        std::string output = "method declaration" + getName();
+        std::string output = "method declaration : '" + getName() + "', type : " + getType()->getName();
         return output;
 }

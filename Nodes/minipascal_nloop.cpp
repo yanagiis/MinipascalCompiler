@@ -1,14 +1,22 @@
 #include "minipascal_nloop.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NLoop::NLoop(minipascal::NExpression* cond, minipascal::NStatement* stmt)
-{
+{ 
         setCond(cond);
         setStmt(stmt);
+        setFail(false);
 }
 
 minipascal::NLoop::~NLoop()
 {
 
+}
+
+void minipascal::NLoop::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 const minipascal::ShareNExpression minipascal::NLoop::getCond()

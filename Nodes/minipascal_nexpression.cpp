@@ -3,6 +3,7 @@
 minipascal::NExpression::NExpression()
 {
         opposite = true;
+        setFail(false);
 }
 
 minipascal::NExpression::~NExpression()
@@ -10,12 +11,12 @@ minipascal::NExpression::~NExpression()
 
 }
 
-const minipascal::Type* minipascal::NExpression::getType()
+minipascal::NType* minipascal::NExpression::getType()
 {
         return type;
 }
 
-void minipascal::NExpression::setType(Type* type)
+void minipascal::NExpression::setType(NType* type)
 {
         this->type = type;
 }

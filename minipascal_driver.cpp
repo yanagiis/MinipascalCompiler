@@ -4,6 +4,9 @@
 
 #include "minipascal_driver.h"
 #include "minipascal_scanner.h"
+#include "Checkers/initializevisitor.h"
+#include "Checkers/typevisitor.h"
+#include "Checkers/codegencontext.h"
 
 namespace minipascal{
 
@@ -11,7 +14,7 @@ namespace minipascal{
 	{
 		trace_scanning = false;
 		trace_parsing = false;
-//                 handler = new SymbolTable_Handler();
+                context = new CodeGenContext();
 	}
 
 	Driver::~Driver()
@@ -41,12 +44,14 @@ namespace minipascal{
 
         bool Driver::declarationChecking() throw()
         {
-//                 return program->initialize(handler);
+                InitializeVisitor visitor = InitializeVisitor(context);
+                visitor.visit(program);
         }
 
         bool Driver::typeChecking()
         {
-
+                TypeVisitor visitor = TypeVisitor();
+                visitor.visit(program);
         }
 
 	void Driver::error(const class location& l, const std::string& m)

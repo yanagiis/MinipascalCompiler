@@ -1,13 +1,22 @@
 #include "minipascal_nstring.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NString::NString(std::string* value)
 {
-
+        setValue(value);
+        setType(new StringType());
+        setFail(false);
 }
 
 minipascal::NString::~NString()
 {
 
+}
+
+void minipascal::NString::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 std::string minipascal::NString::getOutput()

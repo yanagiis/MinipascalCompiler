@@ -13,6 +13,7 @@ namespace minipascal{
                 void setValue(bool value);
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 bool value;
         };

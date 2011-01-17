@@ -8,6 +8,7 @@
 #include "minipascal_nblock.h"
 
 namespace minipascal {
+        class NBlock;
         class NMethodDeclaration : public NDeclaration {
         public:
                 NMethodDeclaration();
@@ -22,6 +23,7 @@ namespace minipascal {
                 ShareNBlock getBlock();
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 Decls_list* args;
                 Decls_list* decl;

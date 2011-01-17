@@ -19,6 +19,7 @@ namespace minipascal{
                 const Exps_list* getExps();
                 // Implement Node pure virtual method
                 std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
         private:
                 std::string name;
                 Exps_list* exps;

@@ -9,6 +9,8 @@ find_package( Boost 1.36.0 COMPONENTS system )
 
 if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
+        add_definitions(-I/usr/include  -DNDEBUG -D_GNU_SOURCE -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -O3)
+        add_definitions(-L/usr/lib/llvm  -lpthread -lffi -ldl -lm)
         add_library(minipascalnodes 
                         minipascal_ndeclaration.cpp 
                         minipascal_nexpression.cpp 
@@ -29,8 +31,7 @@ if(Boost_FOUND)
                         minipascal_nloop.cpp 
                         minipascal_nstatementexpression.cpp 
                         minipascal_type.cpp 
-                        minipascal_visitor.cpp 
                         minipascal_nblock.cpp 
                         minipascal_node.cpp)
-        target_link_libraries(minipascalnodes ${Boost_LIBRARIES})
+        target_link_libraries(minipascalnodes ${Boost_LIBRARIES} "/usr/lib/llvm/libLLVM-2.8.so")
 endif()

@@ -173,7 +173,7 @@ namespace minipascal {
         Id_list* id_list;
         Index_list* index_list;
         
-        Type* type;
+        NType* type;
 
 
 

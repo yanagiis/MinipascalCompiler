@@ -1,10 +1,23 @@
 #include "minipascal_ncontrol.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NControl::NControl(NExpression* cond, NStatement* iftrue, NStatement* iffalse)
 {
         setCond(cond);
         setTrue(iftrue);
         setFalse(iffalse);
+        setFail(false);
+}
+
+minipascal::NControl::~NControl()
+{
+        
+}
+
+void minipascal::NControl::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 const minipascal::ShareNExpression minipascal::NControl::getCond()

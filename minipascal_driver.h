@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 
-// #include "minipascal_nprogram.h"
-//#include "minipascal_symboltable_handler.h"
-
+class CodeGenContext;
 namespace minipascal {
         class NProgram;
 	class Driver
@@ -26,7 +24,7 @@ namespace minipascal {
 
 			class Scanner* lexer;
                         NProgram* program;
-//                         SymbolTable_Handler* handler;
+                        CodeGenContext* context;
 	};
 }
 #endif

@@ -1,8 +1,10 @@
 #include "minipascal_nprogram.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NProgram::NProgram()
 {
-
+        setFail(false);
 }
 
 minipascal::NProgram::~NProgram()
@@ -13,6 +15,11 @@ minipascal::NProgram::~NProgram()
         delete decl_list;
         delete ids;
         delete mhd_list;
+}
+
+void minipascal::NProgram::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 minipascal::ShareNBlock minipascal::NProgram::getBlock()
@@ -58,4 +65,5 @@ void minipascal::NProgram::setMhds(Mhd_list* mhd_list)
 std::string minipascal::NProgram::getOutput()
 {
         std::string output = "new program " + getName();
+        return output;
 }

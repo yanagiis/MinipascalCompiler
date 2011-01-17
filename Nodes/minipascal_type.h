@@ -2,75 +2,108 @@
 #define MINIPASCAL_TYPE_H
 
 #include <string>
+#include "minipascal_node.h"
 
+namespace llvm {
+        class Type;
+}
 namespace minipascal {
         
-        class Type {
+        class NType : public Node{
         public:
-                Type();
-                virtual ~Type();
+                NType();
+                virtual ~NType();
+                // get methods
                 std::string getName();
+                // set methods
                 void setName(std::string name);
-                virtual bool operator==(minipascal::Type* copytype) = 0;
+                // pure methods
+                virtual bool compare(minipascal::NType* copytype) = 0;
+                virtual bool operator==(minipascal::NType* copytype) = 0;
+                virtual const llvm::Type* getLLVMType() = 0;
         private:
                 std::string name;
         };
         
         
-        class ArrayType : public Type {
+        class ArrayType : public NType {
         public:
                 typedef std::pair<int, int> Range;
         public:
-                ArrayType(Type* type = NULL);
+                ArrayType(NType* type = NULL);
                 ArrayType(ArrayType& copytype);
                 virtual ~ArrayType();
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
                 virtual ArrayType operator=(ArrayType& copytype);
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
                 // set methods
-                void setType(Type* type);
+                void setType(NType* type);
                 void setRange(int lowerbound, int upperbound);
                 void setRange(Range range);
                 // get methods
-                Type* getType();
+                NType* getType();
                 Range getRange();
         private:
-                Type* type;
+                NType* type;
                 Range range;
         };
         
-        class IntType : public Type {
+        class IntType : public NType {
         public:
                 IntType();
                 virtual ~IntType();
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
         };
         
-        class RealType : public Type {
+        class RealType : public NType {
         public:
                 RealType();
                 virtual ~RealType();
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
         };
         
-        class StringType : public Type {
+        class StringType : public NType {
         public:
                 StringType();
                 virtual ~StringType();
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
         };
         
-        class BooleanType : public Type {
+        class BooleanType : public NType {
         public:
                 BooleanType();
                 virtual ~BooleanType();
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
         };
         
-        class VoidType : public Type {
+        class VoidType : public NType {
         public:
                 VoidType();
                 virtual ~VoidType();
-                virtual bool operator==(minipascal::Type* copytype);
+                virtual std::string getOutput();
+                virtual void accept(minipascal::Visitor* visitor);
+                virtual bool compare(minipascal::NType* copytype);
+                virtual bool operator==(minipascal::NType* copytype);
+                virtual const llvm::Type* getLLVMType();
         };
 }
 #endif // MINIPASCAL_TYPE_H

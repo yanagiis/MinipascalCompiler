@@ -1,9 +1,12 @@
 #include "minipascal_nbinaryoperator.h"
 
+#include "minipascal_visitor.h"
+
 minipascal::NBinaryOperator::NBinaryOperator(minipascal::NExpression* left, minipascal::NExpression* right)
 {
         setLeft(left);
         setRight(right);
+        setFail(false);
 }
 
 minipascal::NBinaryOperator::NBinaryOperator(minipascal::NBinaryOperator::BOP op, minipascal::NExpression* left, minipascal::NExpression* right)
@@ -15,6 +18,11 @@ minipascal::NBinaryOperator::NBinaryOperator(minipascal::NBinaryOperator::BOP op
 
 minipascal::NBinaryOperator::~NBinaryOperator()
 {
+}
+
+void minipascal::NBinaryOperator::accept(minipascal::Visitor* visitor)
+{
+        return visitor->visit(this);
 }
 
 minipascal::ShareNExpression minipascal::NBinaryOperator::getLeft()

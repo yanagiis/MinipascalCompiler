@@ -2,7 +2,7 @@
 
 minipascal::NStatement::NStatement()
 {
-
+        setFail(false);
 }
 
 minipascal::NStatement::~NStatement()
