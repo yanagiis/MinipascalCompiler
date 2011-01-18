@@ -20,9 +20,11 @@ namespace minipascal {
                 // Implement Node pure virtual method
                 std::string getOutput();
                 virtual void accept(minipascal::Visitor* visitor);
+                virtual llvm::Value* codeGen(CodeGenContext* context);
         private:
                 ShareNExpression cond;
                 ShareNStatement stmt;
+                static int index;
         };
         typedef boost::shared_ptr<NLoop> ShareNLoop;
 }

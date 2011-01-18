@@ -1,8 +1,14 @@
 #include "minipascal_nint.h"
 
 #include <stdio.h>
+#include <llvm/Type.h>
+#include <llvm/Constants.h>
+#include <llvm/LLVMContext.h>
+
+#include <iostream>
 
 #include "minipascal_visitor.h"
+#include "../Checkers/codegencontext.h"
 
 minipascal::NInt::NInt(int value)
 {
@@ -37,4 +43,10 @@ int minipascal::NInt::getValue()
 void minipascal::NInt::setValue(int value)
 {
         this->value = value;
+}
+
+llvm::Value* minipascal::NInt::codeGen(CodeGenContext* context)
+{
+        std::cout << "Generating code for int " << getValue() << std::endl;
+        return llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm::getGlobalContext()), value, true);
 }

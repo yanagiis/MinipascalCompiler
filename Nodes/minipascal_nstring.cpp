@@ -1,6 +1,9 @@
 #include "minipascal_nstring.h"
 
+#include <llvm/Constants.h>
+#include <llvm/LLVMContext.h>
 #include "minipascal_visitor.h"
+#include "../Checkers/codegencontext.h"
 
 minipascal::NString::NString(std::string* value)
 {
@@ -32,4 +35,9 @@ std::string minipascal::NString::getValue()
 void minipascal::NString::setValue(std::string* value)
 {
         this->value = *value;
+}
+
+llvm::Value* minipascal::NString::codeGen(CodeGenContext* context)
+{
+        return llvm::ConstantArray::get(llvm::getGlobalContext(), getValue().c_str(), true);
 }

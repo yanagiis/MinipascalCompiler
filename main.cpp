@@ -23,9 +23,9 @@ int main(int argc, char** argv)
                         if(result)
                         {
                                 std::cout << "2. Start checking semantic....." << std::endl;
-                                driver.declarationChecking();
                                 std::cout << "3. Start Type check ....." << std::endl;
-                                driver.typeChecking();
+                                std::cout << "4. Start generating code ....." << std::endl;
+                                driver.codeGen();
                         }
                         else
                         {

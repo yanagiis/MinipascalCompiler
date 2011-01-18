@@ -2,12 +2,9 @@
 
 #include <stdio.h>
 #include <iostream>
-#include <llvm/Type.h>
-#include <llvm/DerivedTypes.h>
+#include <llvm/Module.h>
 #include <llvm/LLVMContext.h>
 #include <llvm/Instructions.h>
-#include <llvm/Function.h>
-#include <llvm/Module.h>
 #include <boost/cast.hpp>
 
 #include "symbol.h"
@@ -123,27 +120,33 @@ void minipascal::InitializeVisitor::visit(minipascal::NMethodCall* node)
         minipascal::Exps_list::const_iterator eit;
         for(eit = exps->begin(); eit != exps->end(); ++eit)
         {
-                (*it)->accept(this);
+                (*eit)->accept(this);
         }
         
         // args check
         try{
-                NMethodDeclaration* method = (NMethodDeclaration*)it->second->declaration;
-                Decls_list* decls = method->getDecl();
+                NMethodDeclaration* method = boost::polymorphic_cast<NMethodDeclaration*>(it->second->declaration);
+                Decls_list* decls = method->getArgs();
                 Decls_list::iterator dit;
                 for(dit = decls->begin(), eit = exps->begin(); dit != decls->end() && eit != exps->end(); ++eit, ++dit)
                 {
-                        // TODO function arguments check
+                        if(!((*dit)->getType()->compare((*eit)->getType())))
+                        {
+                                showError("Function " + node->getName() + " args doesn't match" , node);
+                                node->setFail(true);
+                                return;
+                        }
                 }
         }catch(std::bad_cast& e){
-                
+                showError("No such function : " + node->getName(), node);
+                node->setFail(true);
+                return;
         }
 }
 
 void minipascal::InitializeVisitor::visit(minipascal::NMethodDeclaration* node)
 {
         showMessage("NMethodDeclaration -- " + node->getOutput());
-        context->setNodeBlockMap(node);
         
         std::vector<const llvm::Type*> argTypes;
         minipascal::Decls_list* args = node->getArgs();
@@ -161,6 +164,8 @@ void minipascal::InitializeVisitor::visit(minipascal::NMethodDeclaration* node)
         
         context->getCurBlock()->getLocals()->insert(SymbolTableItem(node->getName(), symbol));
         context->pushBlock();
+        context->getCurBlock()->setBlock(bblock);
+        context->setNodeBlockMap(node);
         
         minipascal::Decls_list* decls = node->getDecl();
         minipascal::Decls_list::iterator it;
@@ -179,7 +184,15 @@ void minipascal::InitializeVisitor::visit(minipascal::NMethodDeclaration* node)
 void minipascal::InitializeVisitor::visit(minipascal::NProgram* node)
 {
         showMessage("NProgram -- " + node->getOutput());
+        
+        llvm::FunctionType* ftype = llvm::FunctionType::get(llvm::Type::getVoidTy(llvm::getGlobalContext()), std::vector<const llvm::Type*>(), false);
+        llvm::Function* mainFunction = llvm::Function::Create(ftype, llvm::GlobalValue::InternalLinkage, "main", context->getModule());
+        llvm::BasicBlock* bblock = llvm::BasicBlock::Create(llvm::getGlobalContext(), "entry", mainFunction, 0);
+        
         context->pushBlock();
+        context->getCurBlock()->setBlock(bblock);
+        context->setNodeBlockMap(node);
+        
         minipascal::Decls_list* decls = node->getDecls();
         for(minipascal::Decls_list::iterator it = decls->begin(); it != decls->end(); ++it)
         {

@@ -2,6 +2,9 @@
 #define MINIPASCAL_NODE_H
 
 #include <string>
+#include <llvm/Value.h>
+
+class CodeGenContext;
 
 namespace minipascal {
         class Visitor;
@@ -9,6 +12,7 @@ namespace minipascal {
         public:
                 // visitor use
                 virtual void accept(minipascal::Visitor* visitor);
+                virtual void showError(std::string message);
                 // get methods
                 int getLineNo() const;
                 bool getFail() const;
@@ -18,6 +22,7 @@ namespace minipascal {
                 
                 // pure virtual methods
                 virtual std::string getOutput() = 0;
+                virtual llvm::Value* codeGen(CodeGenContext* context) = 0;
         private:
                 int lineno;
                 bool fail;

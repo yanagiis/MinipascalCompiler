@@ -12,9 +12,11 @@ namespace minipascal {
         public:
                 NVariableDeclaration(const std::string* name = new std::string(), minipascal::NType* type = NULL);
                 virtual ~NVariableDeclaration();
+                bool global;
                 // Implement Node pure virtual method
                 std::string getOutput();
                 virtual void accept(minipascal::Visitor* visitor);
+                virtual llvm::Value* codeGen(CodeGenContext* context);
         };
         typedef boost::shared_ptr<NVariableDeclaration> ShareNVariableDeclaration;
 }

@@ -24,6 +24,7 @@ namespace minipascal {
                 // Implement Node pure virtual method
                 std::string getOutput();
                 virtual void accept(minipascal::Visitor* visitor);
+                virtual llvm::Value* codeGen(CodeGenContext* context);
         private:
                 Decls_list* args;
                 Decls_list* decl;

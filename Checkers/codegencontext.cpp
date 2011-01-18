@@ -12,6 +12,8 @@ CodeGenContext::CodeGenContext()
         blockstack = BlockStack();
         module = new llvm::Module("main", llvm::getGlobalContext());
         setMainFunction(NULL);
+        builder = new llvm::IRBuilder<>(llvm::getGlobalContext());
+        fail = false;
 }
 
 CodeGenContext::~CodeGenContext()
@@ -42,6 +44,11 @@ void CodeGenContext::pushBlock(ShareCodeGenBlock block)
 void CodeGenContext::popBlock()
 {
         blockstack.pop_back();
+}
+
+ShareCodeGenBlock CodeGenContext::getNodeBlockMap(minipascal::Node* node)
+{
+        return blockmap.find(node)->second;
 }
 
 ShareCodeGenBlock CodeGenContext::getCurBlock()

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <llvm/Support/IRBuilder.h>
 #include "codegenblock.h"
 
 namespace minipascal {
@@ -23,6 +24,7 @@ public:
         CodeGenContext();
         virtual ~CodeGenContext();
         ShareCodeGenBlock createCodeGenBlock();
+        ShareCodeGenBlock getNodeBlockMap(minipascal::Node* node);
         void setNodeBlockMap(minipascal::Node* node);
         void pushBlock();
         void pushBlock(ShareCodeGenBlock block);
@@ -35,6 +37,8 @@ public:
         ShareCodeGenBlock getCurBlock();
 public:
         BlockStack blockstack;
+        llvm::IRBuilder<>* builder;
+        bool fail;
 private:
         BlockMap blockmap;
         llvm::Module* module;

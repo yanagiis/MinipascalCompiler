@@ -2,6 +2,7 @@
 #define MINIPASCAL_TYPE_H
 
 #include <string>
+#include <llvm/Constant.h>
 #include "minipascal_node.h"
 
 namespace llvm {
@@ -21,6 +22,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype) = 0;
                 virtual bool operator==(minipascal::NType* copytype) = 0;
                 virtual const llvm::Type* getLLVMType() = 0;
+                virtual llvm::Value* codeGen(CodeGenContext* context) = 0;
+                virtual llvm::Constant* initializer() = 0;
         private:
                 std::string name;
         };
@@ -39,6 +42,8 @@ namespace minipascal {
                 virtual ArrayType operator=(ArrayType& copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
                 // set methods
                 void setType(NType* type);
                 void setRange(int lowerbound, int upperbound);
@@ -60,6 +65,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
         };
         
         class RealType : public NType {
@@ -71,6 +78,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
         };
         
         class StringType : public NType {
@@ -82,6 +91,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
         };
         
         class BooleanType : public NType {
@@ -93,6 +104,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
         };
         
         class VoidType : public NType {
@@ -104,6 +117,8 @@ namespace minipascal {
                 virtual bool compare(minipascal::NType* copytype);
                 virtual bool operator==(minipascal::NType* copytype);
                 virtual const llvm::Type* getLLVMType();
+                virtual llvm::Value* codeGen(CodeGenContext* context);
+                virtual llvm::Constant* initializer();
         };
 }
 #endif // MINIPASCAL_TYPE_H

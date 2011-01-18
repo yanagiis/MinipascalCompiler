@@ -18,6 +18,7 @@
 #include "minipascal_nvariable.h"
 #include "minipascal_nvariabledeclaration.h"
 #include "minipascal_type.h"
+
 namespace minipascal {
         class Visitor {
         public:

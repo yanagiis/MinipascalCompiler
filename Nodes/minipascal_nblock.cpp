@@ -1,6 +1,8 @@
 #include "minipascal_nblock.h"
 
+#include <iostream>
 #include "minipascal_visitor.h"
+#include "../Checkers/codegencontext.h"
 
 minipascal::NBlock::NBlock(minipascal::Stmt_list* stmts)
 {
@@ -31,4 +33,15 @@ std::string minipascal::NBlock::getOutput()
 minipascal::Stmt_list* minipascal::NBlock::getStmts()
 {
         return stmts;
+}
+
+llvm::Value* minipascal::NBlock::codeGen(CodeGenContext* context)
+{
+        std::cout << "Generating Block ... " << std::endl;
+        llvm::Value* last = NULL;
+        for(Stmt_list::iterator it = stmts->begin(); it != stmts->end(); ++it)
+        {
+                last = (*it)->codeGen(context);
+        }
+        return last;
 }

@@ -2,11 +2,15 @@
 #include <sstream>
 #include <iostream>
 
+#include <llvm/Module.h>
 #include "minipascal_driver.h"
 #include "minipascal_scanner.h"
 #include "Checkers/initializevisitor.h"
 #include "Checkers/typevisitor.h"
 #include "Checkers/codegencontext.h"
+#include "Checkers/codegenvisitor.h"
+
+#include <boost/concept_check.hpp>
 
 namespace minipascal{
 
@@ -19,6 +23,7 @@ namespace minipascal{
 
 	Driver::~Driver()
 	{
+                delete context;
 	}
 
 	bool Driver::parse_file(const std::string& filename)
@@ -42,21 +47,11 @@ namespace minipascal{
 		return (parser.parse() == 0);
         }
 
-        bool Driver::declarationChecking() throw()
-        {
-                InitializeVisitor visitor = InitializeVisitor(context);
-                visitor.visit(program);
-        }
-
-        bool Driver::typeChecking()
-        {
-                TypeVisitor visitor = TypeVisitor();
-                visitor.visit(program);
-        }
-        
         bool Driver::codeGen()
         {
-                
+                program->codeGen(context);
+                if(!context->fail)
+                        context->getModule()->dump();
         }
 
 	void Driver::error(const class location& l, const std::string& m)

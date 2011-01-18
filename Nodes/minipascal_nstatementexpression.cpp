@@ -32,3 +32,8 @@ std::string minipascal::NStatementExpression::getOutput()
 {
         return exp->getOutput();
 }
+
+llvm::Value* minipascal::NStatementExpression::codeGen(CodeGenContext* context)
+{
+        getExps()->codeGen(context);
+}

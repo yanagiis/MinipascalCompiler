@@ -5,6 +5,7 @@
 #include <llvm/Type.h>
 #include <llvm/DerivedTypes.h>
 #include <llvm/LLVMContext.h>
+#include <llvm/Constants.h>
 
 #include "minipascal_visitor.h"
 
@@ -293,17 +294,17 @@ bool minipascal::VoidType::operator==(minipascal::NType* copytype)
 const llvm::Type* minipascal::ArrayType::getLLVMType()
 {
         Range range = getRange();
-        return llvm::ArrayType::get(this->getType()->getLLVMType(), range.second - range.first);
+        return llvm::ArrayType::get(this->getType()->getLLVMType(), range.second - range.first + 1);
 }
 
 const llvm::Type* minipascal::BooleanType::getLLVMType()
 {
-        return llvm::Type::getInt8Ty(llvm::getGlobalContext());
+        return llvm::Type::getInt1Ty(llvm::getGlobalContext());
 }
 
 const llvm::Type* minipascal::IntType::getLLVMType()
 {
-        return llvm::Type::getInt32Ty(llvm::getGlobalContext());
+        return llvm::Type::getInt64Ty(llvm::getGlobalContext());
 }
 
 const llvm::Type* minipascal::RealType::getLLVMType()
@@ -319,4 +320,64 @@ const llvm::Type* minipascal::StringType::getLLVMType()
 const llvm::Type* minipascal::VoidType::getLLVMType()
 {
         return llvm::Type::getVoidTy(llvm::getGlobalContext());
+}
+
+llvm::Value* minipascal::ArrayType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Value* minipascal::BooleanType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Value* minipascal::IntType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Value* minipascal::RealType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Value* minipascal::StringType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Value* minipascal::VoidType::codeGen(CodeGenContext* context)
+{
+        return NULL;
+}
+
+llvm::Constant* minipascal::ArrayType::initializer()
+{
+        return llvm::ConstantAggregateZero::get(getLLVMType());
+}
+
+llvm::Constant* minipascal::BooleanType::initializer()
+{
+        return llvm::ConstantInt::get(llvm::getGlobalContext(), llvm::APInt(1, llvm::StringRef("0"), 10));
+}
+
+llvm::Constant* minipascal::IntType::initializer()
+{
+        return llvm::ConstantInt::get(llvm::getGlobalContext(), llvm::APInt(64, llvm::StringRef("0"), 10));
+}
+
+llvm::Constant* minipascal::RealType::initializer()
+{
+        return llvm::ConstantFP::get(llvm::getGlobalContext(), llvm::APFloat(0.000000e+00));
+}
+
+llvm::Constant* minipascal::StringType::initializer()
+{
+
+}
+
+llvm::Constant* minipascal::VoidType::initializer()
+{
+
 }

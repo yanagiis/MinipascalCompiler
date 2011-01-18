@@ -1,8 +1,13 @@
 #include "minipascal_ndouble.h"
 
 #include <stdio.h>
+#include <llvm/Constants.h>
+#include <llvm/LLVMContext.h>
+
+#include <iostream>
 
 #include "minipascal_visitor.h"
+#include "../Checkers/codegencontext.h"
 
 minipascal::NDouble::NDouble(double value)
 {
@@ -37,4 +42,10 @@ double minipascal::NDouble::getValue()
 void minipascal::NDouble::setValue(double value)
 {
         this->value = value;
+}
+
+llvm::Value* minipascal::NDouble::codeGen(CodeGenContext* context)
+{
+        std::cout << "Generating code for double " << getValue() << std::endl;
+        return llvm::ConstantFP::get(llvm::Type::getDoubleTy(llvm::getGlobalContext()), value);
 }

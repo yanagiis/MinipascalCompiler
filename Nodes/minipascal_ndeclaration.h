@@ -12,13 +12,15 @@ namespace minipascal {
         class NDeclaration : public Node{
         public:
                 virtual ~NDeclaration();
-                //get methods
+                // get methods
                 virtual std::string getName();
                 virtual NType* getType();
-                //set methods
+                // set methods
                 virtual void setName(const char* name);
                 virtual void setName(const std::string* name);
                 virtual void setType(minipascal::NType* type);
+                // pure method
+//                 virtual llvm::Value* codeGen(CodeGenContext* context) = 0;
         protected:
                 NDeclaration();
                 NDeclaration(const std::string* name, minipascal::NType* type);
