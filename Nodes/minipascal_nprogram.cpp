@@ -78,6 +78,7 @@ llvm::Value* minipascal::NProgram::codeGen(CodeGenContext* context)
         llvm::FunctionType* ftype = llvm::FunctionType::get(llvm::Type::getVoidTy(llvm::getGlobalContext()), std::vector<const llvm::Type*>(), false);
         llvm::Function* mainFunction = llvm::Function::Create(ftype, llvm::GlobalValue::InternalLinkage, "main", context->getModule());
         llvm::BasicBlock* bblock = llvm::BasicBlock::Create(llvm::getGlobalContext(), "entry", mainFunction, 0);
+        context->setMainFunction(mainFunction);
         
         context->pushBlock();
         context->getCurBlock()->setBlock(bblock);

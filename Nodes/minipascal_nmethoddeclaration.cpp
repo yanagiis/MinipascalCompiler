@@ -95,6 +95,7 @@ llvm::Value* minipascal::NMethodDeclaration::codeGen(CodeGenContext* context)
                 std::string regname = "ptr_" + (*dit)->getName();
                 llvm::Value* tempvalue = context->builder->CreateAlloca(arg_it->getType(), 0, regname.c_str());
                 arg_it->setName((*dit)->getName().c_str());
+                context->builder->CreateStore(arg_it, tempvalue);
                 // add ptr_arg to symboltable
                 argsymbol = new Symbol();
                 argsymbol->declaration = (*dit).get();
@@ -103,10 +104,14 @@ llvm::Value* minipascal::NMethodDeclaration::codeGen(CodeGenContext* context)
         }
         
         // add return value to symboltable
+        VoidType temp;
         Symbol* retsymbol = new Symbol();
-        retsymbol->declaration = this;
-        retsymbol->value = context->builder->CreateAlloca(this->getType()->getLLVMType(), 0, this->getName().c_str());
-        context->getCurBlock()->getLocals()->insert(SymbolTableItem(this->getName(), retsymbol));
+        if(!(getType()->compare(&temp)))
+        {
+                retsymbol->declaration = this;
+                retsymbol->value = context->builder->CreateAlloca(this->getType()->getLLVMType(), 0, this->getName().c_str());
+                context->getCurBlock()->getLocals()->insert(SymbolTableItem(this->getName(), retsymbol));
+        }
         
         minipascal::Decls_list* decls = getDecl();
         minipascal::Decls_list::iterator it;
@@ -116,8 +121,15 @@ llvm::Value* minipascal::NMethodDeclaration::codeGen(CodeGenContext* context)
         }
         getBlock()->codeGen(context);
         
-        llvm::Value* retval = context->builder->CreateLoad(retsymbol->value, "retval");
-        context->builder->CreateRet(retval);
+        if(!(getType()->compare(&temp)))
+        {
+                llvm::Value* retval = context->builder->CreateLoad(retsymbol->value, "retval");
+                context->builder->CreateRet(retval);
+        }
+        else
+        {
+                context->builder->CreateRetVoid();
+        }
         
         context->popBlock();
         context->builder->SetInsertPoint(context->getCurBlock()->getBlock());

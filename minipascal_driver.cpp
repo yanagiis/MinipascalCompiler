@@ -2,7 +2,19 @@
 #include <sstream>
 #include <iostream>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <llvm/Module.h>
+#include <llvm/PassManager.h>
+#include <llvm/Assembly/PrintModulePass.h>
+#include <llvm/Support/raw_ostream.h>
+#include <llvm/ExecutionEngine/ExecutionEngine.h>
+#include <llvm/ExecutionEngine/JIT.h>
+#include <llvm/ExecutionEngine/GenericValue.h>
+#include <llvm/Target/TargetSelect.h>
+
 #include "minipascal_driver.h"
 #include "minipascal_scanner.h"
 #include "Checkers/initializevisitor.h"
@@ -51,7 +63,33 @@ namespace minipascal{
         {
                 program->codeGen(context);
                 if(!context->fail)
+                {
                         context->getModule()->dump();
+                        int filefd = open("output.ll", O_WRONLY | O_CREAT | O_TRUNC, 0666);
+                        llvm::PassManager PM;
+                        llvm::raw_fd_ostream out(filefd, true);
+                        
+                        PM.add(llvm::createPrintModulePass(&out));
+                        PM.run(*(context->getModule()));
+                        
+//                         runCode();
+                }
+        }
+        
+        void Driver::runCode()
+        {
+                llvm::InitializeNativeTarget();
+                llvm::llvm_start_multithreaded();
+                
+                std::cout << "Running code ... " << std::endl;
+                llvm::EngineBuilder builder = llvm::EngineBuilder(context->getModule());
+                builder.setEngineKind(llvm::EngineKind::Interpreter);
+                builder.setOptLevel(llvm::CodeGenOpt::Default);
+//                 llvm::ExecutionEngine* ee = llvm::ExecutionEngine::create(context->getModule(), false);
+                llvm::ExecutionEngine* ee = builder.create();
+                std::vector<llvm::GenericValue> noargs;
+                llvm::GenericValue v = ee->runFunction(context->getMainFunction(), noargs);
+                std::cout << "Code was run." << std::endl;
         }
 
 	void Driver::error(const class location& l, const std::string& m)

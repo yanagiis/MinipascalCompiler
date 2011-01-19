@@ -72,6 +72,7 @@ llvm::Value* minipascal::NLoop::codeGen(CodeGenContext* context)
         
         context->builder->SetInsertPoint(body_bb);
         llvm::Value* bodyvalue = getStmt()->codeGen(context);
+        context->builder->CreateBr(check_bb);
         
         context->builder->SetInsertPoint(loop_cont);
 //         llvm::PHINode* phi = context->builder->CreatePHI(llvm::Type::getDoubleTy(llvm::getGlobalContext()), buf);

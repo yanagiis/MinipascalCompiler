@@ -1,7 +1,9 @@
 #include "minipascal_nstring.h"
 
+#include <iostream>
 #include <llvm/Constants.h>
 #include <llvm/LLVMContext.h>
+#include <llvm/GlobalVariable.h>
 #include "minipascal_visitor.h"
 #include "../Checkers/codegencontext.h"
 
@@ -35,9 +37,13 @@ std::string minipascal::NString::getValue()
 void minipascal::NString::setValue(std::string* value)
 {
         this->value = *value;
+        this->value.erase(0, 1);
+        this->value.erase(this->value.size()-1, this->value.size());
 }
 
 llvm::Value* minipascal::NString::codeGen(CodeGenContext* context)
 {
-        return llvm::ConstantArray::get(llvm::getGlobalContext(), getValue().c_str(), true);
+        std::cout << "Generating code for " << getOutput() << std::endl;
+        llvm::Value* gvar_array_str = context->builder->CreateGlobalStringPtr(getValue().c_str());
+        return gvar_array_str;
 }

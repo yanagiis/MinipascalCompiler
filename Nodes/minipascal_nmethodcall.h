@@ -2,6 +2,7 @@
 #define MINIPASCAL_NMETHODCALL_H
 
 #include <string>
+#include <map>
 
 #include "minipascal_lists.h"
 #include "minipascal_nexpression.h"
@@ -21,6 +22,8 @@ namespace minipascal{
                 std::string getOutput();
                 virtual void accept(minipascal::Visitor* visitor);
                 virtual llvm::Value* codeGen(CodeGenContext* context);
+        private:
+                llvm::Value* specialMethodCall(CodeGenContext* context);
         private:
                 std::string name;
                 Exps_list* exps;

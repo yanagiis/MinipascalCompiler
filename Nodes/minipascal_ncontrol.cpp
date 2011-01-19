@@ -73,7 +73,12 @@ llvm::Value* minipascal::NControl::codeGen(CodeGenContext* context)
         // condition type check
         BooleanType temp;
         if(!(getCond()->getType()->compare(&temp)))
+        {
+                showError("Condition are not boolean type");
+                setFail(true);
+                context->fail = true;
                 return NULL;
+        }
         
         char buf[32];
         int count;
