@@ -74,10 +74,15 @@ llvm::Value* minipascal::NControl::codeGen(CodeGenContext* context)
         BooleanType temp;
         if(!(getCond()->getType()->compare(&temp)))
         {
-                showError("Condition are not boolean type");
-                setFail(true);
-                context->fail = true;
-                return NULL;
+                IntType inttest;
+                if(!(getCond()->getType()->compare(&inttest)))
+                {
+                        showError("Condition are not boolean or integer type");
+                        setFail(true);
+                        context->fail = true;
+                        return NULL;
+                }
+                condvalue = context->builder->CreateICmpNE(condvalue, llvm::ConstantInt::get(inttest.getLLVMType(), 0, true), "");
         }
         
         char buf[32];
@@ -94,7 +99,6 @@ llvm::Value* minipascal::NControl::codeGen(CodeGenContext* context)
         context->builder->SetInsertPoint(then_bb);
         llvm::Value* thenvalue = getTrue()->codeGen(context);
         context->builder->CreateBr(ifcont_bb);
-        then_bb = context->builder->GetInsertBlock();
         
         context->builder->SetInsertPoint(else_bb);
         llvm::Value* elsevalue = getFalse()->codeGen(context);
@@ -103,11 +107,6 @@ llvm::Value* minipascal::NControl::codeGen(CodeGenContext* context)
         if(condvalue == NULL || thenvalue == NULL || elsevalue == NULL) return NULL;
         
         context->builder->SetInsertPoint(ifcont_bb);
-        
-//         count = sprintf(buf, "IFTMP_%d", index);
-//         llvm::PHINode* phi = context->builder->CreatePHI(llvm::Type::getDoubleTy(llvm::getGlobalContext()), buf);
-//         phi->addIncoming(thenvalue, then_bb);
-//         phi->addIncoming(elsevalue, else_bb);
         
         ++index;
         return ifcont_bb;

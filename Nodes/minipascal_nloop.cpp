@@ -68,6 +68,22 @@ llvm::Value* minipascal::NLoop::codeGen(CodeGenContext* context)
         
         llvm::Value* condvalue = getCond()->codeGen(context);
         if(condvalue == NULL) return NULL;
+        
+        // condition type check
+        BooleanType temp;
+        if(!(getCond()->getType()->compare(&temp)))
+        {
+                IntType inttest;
+                if(!(getCond()->getType()->compare(&inttest)))
+                {
+                        showError("Condition are not boolean or integer type");
+                        setFail(true);
+                        context->fail = true;
+                        return NULL;
+                }
+                condvalue = context->builder->CreateICmpNE(condvalue, llvm::ConstantInt::get(inttest.getLLVMType(), 0, true), "");
+        }
+        
         context->builder->CreateCondBr(condvalue, body_bb, loop_cont);
         
         context->builder->SetInsertPoint(body_bb);
@@ -75,9 +91,7 @@ llvm::Value* minipascal::NLoop::codeGen(CodeGenContext* context)
         context->builder->CreateBr(check_bb);
         
         context->builder->SetInsertPoint(loop_cont);
-//         llvm::PHINode* phi = context->builder->CreatePHI(llvm::Type::getDoubleTy(llvm::getGlobalContext()), buf);
         
         ++index;
         return condvalue;
-//         return phi;
 }
